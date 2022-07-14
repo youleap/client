@@ -1,0 +1,29 @@
+{
+  "name": "@youleap/client",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/frontend",
+    "apps/backend/*",
+    "packages/*"
+  ],
+  "maintainers": [
+    "Kevin Orel Edry <kevin@youleap.com",
+    "Nir Tamir <nir@youleap.com"
+  ],
+  "engines": {
+    "node": ">=14.17",
+    "pnpm": ">=7.3.0 <8"
+  },
+  "scripts": {},
+  "lint-staged": {
+    "**/package.json": "pnpm run sync-packages && :",
+    "*.{ts,tsx,md}": "eslint --max-warnings=0 --cache --fix",
+    "*.{ts,tsx,css,html,md,json,js}": "prettier --write",
+    "apps/frontend/src/pages/**.tsx": "pnpm run frontend:generate-pages-types"
+  },
+  "devDependencies": {},
+  "jira-prepare-commit-msg": {
+    "messagePattern": "$J - $M"
+  }
+}
