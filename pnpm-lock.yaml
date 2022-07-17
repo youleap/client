@@ -11,6 +11,7 @@ importers:
       chalk: 4.1.0
       commander: ^9.4.0
       fastify: ^4.2.1
+      jwt-decode: ^3.1.2
       open: ^8.4.0
       ora: ^6.1.2
       prompts: ^2.4.2
@@ -22,6 +23,7 @@ importers:
       chalk: 4.1.0
       commander: 9.4.0
       fastify: 4.2.1
+      jwt-decode: 3.1.2
       open: 8.4.0
       ora: 6.1.2
       prompts: 2.4.2
@@ -933,6 +935,10 @@ packages:
 
   /json-schema-traverse/1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
+    dev: false
+
+  /jwt-decode/3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
     dev: false
 
   /kleur/3.0.3:

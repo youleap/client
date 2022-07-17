@@ -5,9 +5,12 @@
   "bin": "dist/cli.js",
   "scripts": {
     "build": "tsup src/index.tsx && cp -r src/assets ./dist && chmod +x dist/index.js",
+    "help": "npm run build && dist/index.js help",
+    "auth:help": "npm run build && dist/index.js auth help",
     "auth:login": "npm run build && dist/index.js auth login",
     "auth:print-access-token": "npm run build && dist/index.js auth print-access-token",
-    "auth:logout": "npm run build && dist/index.js auth logout"
+    "auth:logout": "npm run build && dist/index.js auth logout",
+    "generate": "npm run build && dist/index.js generate"
   },
   "files": [
     "dist/cli.js"
@@ -18,6 +21,7 @@
     "chalk": "4.1.0",
     "commander": "^9.4.0",
     "fastify": "^4.2.1",
+    "jwt-decode": "^3.1.2",
     "open": "^8.4.0",
     "ora": "^6.1.2",
     "prompts": "^2.4.2"
