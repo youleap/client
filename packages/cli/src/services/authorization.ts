@@ -7,6 +7,13 @@ const AUTH0_CLIENT_ID = 'pEk3YxP47srCFp7ZFdmoj9FR0IXvulqz';
 const CODE_VERIFIER = base64URLEncode(crypto.randomBytes(32));
 const CODE_CHALLENGE = base64URLEncode(sha256(CODE_VERIFIER));
 
+interface Auth0TokenResponse {
+  access_token: string;
+  scope: string;
+  expires_in: number;
+  token_type: string;
+}
+
 export async function getToken(code: string): Promise<string> {
   const options = {
     method: 'POST',
@@ -22,29 +29,28 @@ export async function getToken(code: string): Promise<string> {
   };
 
   try {
-    const response = await axios.request(options);
-    console.log(response.data);
-    return response.data.access_token;
+    const { data } = await axios.request<Auth0TokenResponse>(options);
+    return data.access_token;
   } catch (e) {
-    console.log(e);
     throw e;
   }
 }
 
-export async function handleAuthorization(state: string): Promise<void> {
-  const authUrl = [
+export function getAuthorizationUrl(): string {
+  return [
     `https://${AUTH0ֹֹֹֹֹ_DOMAIN}/authorize`,
     `?response_type=code`,
     `&code_challenge=${CODE_CHALLENGE}`,
     `&code_challenge_method=S256`,
     `&client_id=${AUTH0_CLIENT_ID}`,
     `&redirect_uri=http://localhost:8085/`,
-    `&scope=openid email query`,
-    `$audience=https://gateway.youleap-local.io/base`,
-    `&state=${state}`,
+    `&audience=https://gateway.youleap-local.io/base`,
+    `&scope=query`,
   ].join('');
+}
 
-  await open(authUrl, { wait: true });
+export async function openAuthorizationUrl(authUrl: string): Promise<void> {
+  await open(authUrl);
 }
 
 function base64URLEncode(str: Buffer) {
