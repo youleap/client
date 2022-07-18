@@ -10,7 +10,7 @@
     "auth:login": "npm run build && dist/index.js auth login",
     "auth:print-access-token": "npm run build && dist/index.js auth print-access-token",
     "auth:logout": "npm run build && dist/index.js auth logout",
-    "generate": "npm run build && dist/index.js generate"
+    "generate": "npm run build && NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 dist/index.js generate"
   },
   "files": [
     "dist/cli.js"
@@ -23,7 +23,7 @@
     "fastify": "^4.2.1",
     "jwt-decode": "^3.1.2",
     "open": "^8.4.0",
-    "ora": "^6.1.2",
+    "ora": "5.4.1",
     "prompts": "^2.4.2"
   },
   "devDependencies": {

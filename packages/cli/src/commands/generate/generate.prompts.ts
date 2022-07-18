@@ -1,10 +1,22 @@
 import chalk from 'chalk';
 import prompts from 'prompts';
-import { Tenant, TenantId } from './generate.interface';
+import ora, { Ora } from 'ora';
+
+import { TenantId } from '../../interfaces/tenant.interface';
+import { TenantResponseDto } from '../../dtos/tenant.dto';
+import { SpinnerState } from '../../interfaces/spinner.interface';
 
 const warning = chalk.hex('#FFA500');
+const tenantSpinnerInstance: Ora = ora();
 
-async function confirmation(tenants: Array<Tenant>): Promise<TenantId> {
+async function chooseTenant(tenants: Array<TenantResponseDto>): Promise<TenantId> {
+  if (tenants.length === 0) {
+    throw new Error("User isn't associated to a tenant.");
+  }
+  if (tenants.length === 1) {
+    return tenants[0]!.id;
+  }
+  console.log();
   const result = await prompts({
     type: 'select',
     name: 'value',
@@ -43,4 +55,17 @@ function missingApiKey(): void {
   console.log('Authentication command:', chalk.bold('youleap auth login'));
 }
 
-export const GeneratePrompts = { success, failed, confirmation, abort, missingApiKey };
+function tenantsSpinner(state: SpinnerState, text?: string): void {
+  switch (state) {
+    case SpinnerState.Start:
+      tenantSpinnerInstance.start(text);
+      break;
+    case SpinnerState.Succeed:
+      tenantSpinnerInstance.succeed(text);
+      break;
+    case SpinnerState.Failed:
+      tenantSpinnerInstance.fail(text);
+  }
+}
+
+export const GeneratePrompts = { success, failed, chooseTenant, abort, missingApiKey, tenantsSpinner };

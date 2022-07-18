@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { Auth0TokenResponseDto } from '../dtos/token.dto';
 
 export async function getToken(code: string, clientId: string, codeVerifier: string): Promise<string> {
-  const options = {
+  const options: AxiosRequestConfig = {
     method: 'POST',
     url: 'https://youleap.eu.auth0.com/oauth/token',
     headers: { 'content-type': 'application/x-www-form-urlencoded' },

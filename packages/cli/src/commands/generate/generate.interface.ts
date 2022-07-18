@@ -1,10 +1,3 @@
-export type TenantId = `tenant_${string}`;
-
-export interface Tenant {
-  name: string;
-  id: TenantId;
-}
-
 export interface JwtPayload {
   iss: string;
   sub: string;

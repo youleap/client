@@ -1,0 +1,1 @@
+export type TenantId = `tenant_${string}`;
