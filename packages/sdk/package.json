@@ -5,9 +5,15 @@
     "source": "./index.ts",
     "types": "./index.ts",
     "scripts": {
-      "build": "tsc",
-      "clean": "rm -rf ./dist",
-      
-      "type-check": "tsc --noEmit"
+        "build": "tsc",
+        "clean": "rm -rf ./dist",
+        "type-check": "tsc --noEmit",
+        "prisma:generate": "prisma generate"
+    },
+    "devDependencies": {
+        "prisma": "^4.0.0"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.0.0"
     }
-  }
+}
