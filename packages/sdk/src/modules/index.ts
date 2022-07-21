@@ -7,10 +7,13 @@ export class YouleapClient {
 }
 
 const youleap = new YouleapClient();
-const furniture = await youleap.db.catalog.furniture.findMany({
-    where: {
-        images: {
-            equals: "asdfasdf"
-        }
-    }
-})
+const furniture = await youleap.db.catalog.furniture.count({
+  select: {
+    id: true,
+  },
+  where: {
+    images: {
+      isEmpty: true,
+    },
+  },
+});

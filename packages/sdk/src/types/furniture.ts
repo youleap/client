@@ -8,6 +8,7 @@ import {
   SortOrder,
   XOR,
   StringFieldUpdateOperationsInput,
+  Merge,
 } from './common';
 
 /**
@@ -126,6 +127,23 @@ export type FurnitureDeleteArgs = {
  */
 export type FurnitureDeleteManyArgs = {
   where?: FurnitureWhereInput;
+};
+
+export type FurnitureCountArgs = Merge<
+  Omit<FurnitureFindManyArgs, 'select' | 'include'> & {
+    select?: FurnitureCountAggregateInputType | true;
+  }
+>;
+
+export type FurnitureCountAggregateInputType = {
+  id?: true;
+  name?: true;
+  type?: true;
+  images?: true;
+  vendor?: true;
+  inStock?: true;
+  unitCost?: true;
+  _all?: true;
 };
 
 export type FurnitureCreateManyInput = {
@@ -264,6 +282,17 @@ export type FurnitureCountOrderByAggregateInput = {
   vendor?: SortOrder;
   inStock?: SortOrder;
   unitCost?: SortOrder;
+};
+
+export type FurnitureCountAggregateOutputType = {
+  id: number;
+  name: number;
+  type: number;
+  images: number;
+  vendor: number;
+  inStock: number;
+  unitCost: number;
+  _all: number;
 };
 
 export type CountOrderByAggregateInput<T> = {
