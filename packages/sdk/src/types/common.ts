@@ -190,10 +190,6 @@ export type StringFieldUpdateOperationsInput = {
   set?: string;
 };
 
-export enum ModelName {
-  Furniture = 'Furniture',
-}
-
 // export type ModelName = typeof ModelName[keyof typeof ModelName];
 
 export type Datasources = {
@@ -205,27 +201,7 @@ export type Datasource = {
 };
 
 export type RejectOnNotFound = boolean | ((error: Error) => Error);
-export type RejectPerModel = { [P in ModelName]?: RejectOnNotFound };
-export type RejectPerOperation = { [P in 'findUnique' | 'findFirst']?: RejectPerModel | RejectOnNotFound };
-type IsReject<T> = T extends true ? True : T extends (err: Error) => Error ? True : False;
-export type HasReject<
-  GlobalRejectSettings extends YouleapClientOptions['rejectOnNotFound'],
-  LocalRejectSettings,
-  Action extends DBAction,
-  Model extends ModelName,
-> = LocalRejectSettings extends RejectOnNotFound
-  ? IsReject<LocalRejectSettings>
-  : GlobalRejectSettings extends RejectPerOperation
-  ? Action extends keyof GlobalRejectSettings
-    ? GlobalRejectSettings[Action] extends RejectOnNotFound
-      ? IsReject<GlobalRejectSettings[Action]>
-      : GlobalRejectSettings[Action] extends RejectPerModel
-      ? Model extends keyof GlobalRejectSettings[Action]
-        ? IsReject<GlobalRejectSettings[Action][Model]>
-        : False
-      : False
-    : False
-  : IsReject<GlobalRejectSettings>;
+
 
 export type ErrorFormat = 'pretty' | 'colorless' | 'minimal';
 
@@ -246,50 +222,6 @@ export type DBAction =
   | 'count'
   | 'runCommandRaw'
   | 'findRaw';
-
-export interface YouleapClientOptions {
-  /**
-   * Configure findUnique/findFirst to throw an error if the query returns null.
-   * @deprecated since 4.0.0. Use `findUniqueOrThrow`/`findFirstOrThrow` methods instead.
-   * @example
-   * ```
-   * // Reject on both findUnique/findFirst
-   * rejectOnNotFound: true
-   * // Reject only on findFirst with a custom error
-   * rejectOnNotFound: { findFirst: (err) => new Error("Custom Error")}
-   * // Reject on user.findUnique with a custom error
-   * rejectOnNotFound: { findUnique: {User: (err) => new Error("User not found")}}
-   * ```
-   */
-  rejectOnNotFound?: RejectOnNotFound | RejectPerOperation;
-  /**
-   * Overwrites the datasource url from your prisma.schema file
-   */
-  datasources?: Datasources;
-
-  /**
-   * @default "colorless"
-   */
-  errorFormat?: ErrorFormat;
-
-  /**
-   * @example
-   * ```
-   * // Defaults to stdout
-   * log: ['query', 'info', 'warn', 'error']
-   *
-   * // Emit as events
-   * log: [
-   *  { emit: 'stdout', level: 'query' },
-   *  { emit: 'stdout', level: 'info' },
-   *  { emit: 'stdout', level: 'warn' }
-   *  { emit: 'stdout', level: 'error' }
-   * ]
-   * ```
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
-   */
-  log?: Array<LogLevel | LogDefinition>;
-}
 
 /* Types for Logging */
 export type LogLevel = 'info' | 'query' | 'warn' | 'error';
