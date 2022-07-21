@@ -5,3 +5,12 @@ export class YouleapClient {
     return new DatabaseDelegate();
   }
 }
+
+const youleap = new YouleapClient();
+const furniture = await youleap.db.catalog.furniture.findMany({
+    where: {
+        images: {
+            equals: "asdfasdf"
+        }
+    }
+})

@@ -6,18 +6,14 @@ import {
   StringNullableListFilter,
   TrueKeys,
   SortOrder,
+  XOR,
+  StringFieldUpdateOperationsInput,
 } from './common';
 
-export enum FurnitureTypes {
-  Bookshelf = 'Bookshelf',
-  Chairs = 'Chairs',
-  Lighting = 'Lighting',
-  Beds = 'Beds',
-  Rugs = 'Rugs',
-  Sofas = 'Sofas',
-  Tables = 'Tables',
-}
-
+/**
+ * Model Furniture
+ *
+ */
 export type Furniture = {
   id: string;
   name: string;
@@ -28,11 +24,30 @@ export type Furniture = {
   unitCost: number;
 };
 
+/**
+ * Enums
+ */
+export enum FurnitureTypes {
+  Bookshelf = 'Bookshelf',
+  Chairs = 'Chairs',
+  Lighting = 'Lighting',
+  Beds = 'Beds',
+  Rugs = 'Rugs',
+  Sofas = 'Sofas',
+  Tables = 'Tables',
+}
+
+/**
+ * Furniture: findUnique
+ */
 export type FurnitureFindUniqueArgs = {
   select?: FurnitureSelect | null;
   where: FurnitureWhereUniqueInput;
 };
 
+/**
+ * Furniture findMany
+ */
 export type FurnitureFindManyArgs = {
   select?: FurnitureSelect | null;
   where?: FurnitureWhereInput;
@@ -41,6 +56,146 @@ export type FurnitureFindManyArgs = {
   take?: number;
   skip?: number;
   distinct?: Enumerable<FurnitureScalarFieldEnum>;
+};
+
+/**
+ * Furniture: findFirst
+ */
+export type FurnitureFindFirstArgs = {
+  select?: FurnitureSelect | null;
+  where?: FurnitureWhereInput;
+  orderBy?: Enumerable<FurnitureOrderByWithRelationInput>;
+  cursor?: FurnitureWhereUniqueInput;
+  take?: number;
+  skip?: number;
+  distinct?: Enumerable<FurnitureScalarFieldEnum>;
+};
+
+/**
+ * Furniture create
+ */
+export type FurnitureCreateArgs = {
+  select?: FurnitureSelect | null;
+  data: XOR<FurnitureCreateInput, FurnitureUncheckedCreateInput>;
+};
+
+/**
+ * Furniture createMany
+ */
+export type FurnitureCreateManyArgs = {
+  data: Enumerable<FurnitureCreateManyInput>;
+};
+
+/**
+ * Furniture update
+ */
+export type FurnitureUpdateArgs = {
+  select?: FurnitureSelect | null;
+  data: XOR<FurnitureUpdateInput, FurnitureUncheckedUpdateInput>;
+  where: FurnitureWhereUniqueInput;
+};
+
+/**
+ * Furniture updateMany
+ */
+export type FurnitureUpdateManyArgs = {
+  data: XOR<FurnitureUpdateManyMutationInput, FurnitureUncheckedUpdateManyInput>;
+  where?: FurnitureWhereInput;
+};
+
+/**
+ * Furniture upsert
+ */
+export type FurnitureUpsertArgs = {
+  select?: FurnitureSelect | null;
+  where: FurnitureWhereUniqueInput;
+  create: XOR<FurnitureCreateInput, FurnitureUncheckedCreateInput>;
+  update: XOR<FurnitureUpdateInput, FurnitureUncheckedUpdateInput>;
+};
+
+/**
+ * Furniture delete
+ */
+export type FurnitureDeleteArgs = {
+  select?: FurnitureSelect | null;
+  where: FurnitureWhereUniqueInput;
+};
+
+/**
+ * Furniture deleteMany
+ */
+export type FurnitureDeleteManyArgs = {
+  where?: FurnitureWhereInput;
+};
+
+export type FurnitureCreateManyInput = {
+  id?: string;
+  name: string;
+  type: FurnitureTypes;
+  images?: FurnitureCreateImagesInput | Enumerable<string>;
+  vendor: string;
+  inStock: boolean;
+  unitCost: number;
+};
+
+export type FurnitureUpdateInput = {
+  name?: StringFieldUpdateOperationsInput | string;
+  type?: EnumFurnitureTypesFieldUpdateOperationsInput | FurnitureTypes;
+  images?: FurnitureUpdateImagesInput | Enumerable<string>;
+  vendor?: StringFieldUpdateOperationsInput | string;
+  inStock?: BoolFieldUpdateOperationsInput | boolean;
+  unitCost?: IntFieldUpdateOperationsInput | number;
+};
+
+export type FurnitureUncheckedUpdateInput = {
+  name?: StringFieldUpdateOperationsInput | string;
+  type?: EnumFurnitureTypesFieldUpdateOperationsInput | FurnitureTypes;
+  images?: FurnitureUpdateImagesInput | Enumerable<string>;
+  vendor?: StringFieldUpdateOperationsInput | string;
+  inStock?: BoolFieldUpdateOperationsInput | boolean;
+  unitCost?: IntFieldUpdateOperationsInput | number;
+};
+
+export type FurnitureUpdateManyMutationInput = {
+  name?: StringFieldUpdateOperationsInput | string;
+  type?: EnumFurnitureTypesFieldUpdateOperationsInput | FurnitureTypes;
+  images?: FurnitureUpdateImagesInput | Enumerable<string>;
+  vendor?: StringFieldUpdateOperationsInput | string;
+  inStock?: BoolFieldUpdateOperationsInput | boolean;
+  unitCost?: IntFieldUpdateOperationsInput | number;
+};
+
+export type FurnitureUncheckedUpdateManyInput = {
+  name?: StringFieldUpdateOperationsInput | string;
+  type?: EnumFurnitureTypesFieldUpdateOperationsInput | FurnitureTypes;
+  images?: FurnitureUpdateImagesInput | Enumerable<string>;
+  vendor?: StringFieldUpdateOperationsInput | string;
+  inStock?: BoolFieldUpdateOperationsInput | boolean;
+  unitCost?: IntFieldUpdateOperationsInput | number;
+};
+
+export type FurnitureCreateInput = {
+  id?: string;
+  name: string;
+  type: FurnitureTypes;
+  images?: FurnitureCreateImagesInput | Enumerable<string>;
+  vendor: string;
+  inStock: boolean;
+  unitCost: number;
+};
+
+export type FurnitureCreateImagesInput = {
+  set: Enumerable<string>;
+};
+
+export type FurnitureUncheckedCreateInput = {
+  id?: string;
+  name: string;
+  type: FurnitureTypes;
+  images?: FurnitureCreateImagesInput | Enumerable<string>;
+  vendor: string;
+  inStock: boolean;
+  unitCost: number;
 };
 
 export enum FurnitureScalarFieldEnum {
@@ -176,3 +331,24 @@ export type FurnitureGetPayload<S extends boolean | null | undefined | Furniture
       }
     : Furniture
   : Furniture;
+
+export type EnumFurnitureTypesFieldUpdateOperationsInput = {
+  set?: FurnitureTypes;
+};
+
+export type FurnitureUpdateImagesInput = {
+  set?: Enumerable<string>;
+  push?: string | Enumerable<string>;
+};
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean;
+};
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number;
+  increment?: number;
+  decrement?: number;
+  multiply?: number;
+  divide?: number;
+};
