@@ -1,12 +1,17 @@
 #!/usr/bin/env node
-import { handleLoginCommand } from './commands/auth/login';
-import { handlePrintAccessTokenCommand } from './commands/auth/print-access-token';
-import { handleLogoutCommand } from './commands/auth/logout';
-import { handleGenerateCommand } from './commands/generate';
+import { handleLoginCommand } from './commands/auth/login/index';
+import { handlePrintAccessTokenCommand } from './commands/auth/print-access-token/index';
+import { handleLogoutCommand } from './commands/auth/logout/index';
+import { handleGenerateCommand } from './commands/generate/index';
 import { Command } from 'commander';
+import { generatorHandler } from './handlers/generator/generator.handler';
+
+
 const program = new Command();
 
 program.name('youleap').description('Used to authenticate and manage your youleap resources.').version('1.0.0');
+
+generatorHandler();
 
 //==============[Authentication Commands]==============//
 

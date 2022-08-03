@@ -8,8 +8,8 @@
     "packages/*"
   ],
   "maintainers": [
-    "Kevin Orel Edry <kevin@youleap.com",
-    "Nir Tamir <nir@youleap.com"
+    "Kevin Orel Edry <kevin@youleap.com>",
+    "Nir Tamir <nir@youleap.com>"
   ],
   "engines": {
     "node": ">=14.17",

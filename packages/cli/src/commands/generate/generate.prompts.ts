@@ -8,6 +8,9 @@ import { SpinnerState } from '../../interfaces/spinner.interface';
 
 const warning = chalk.hex('#FFA500');
 const tenantSpinnerInstance: Ora = ora();
+const basesSpinnerInstance: Ora = ora();
+const tablesSpinnerInstance: Ora = ora();
+const generationSpinnerInstance: Ora = ora();
 
 async function chooseTenant(tenants: Array<TenantResponseDto>): Promise<TenantId> {
   if (tenants.length === 0) {
@@ -68,4 +71,53 @@ function tenantsSpinner(state: SpinnerState, text?: string): void {
   }
 }
 
-export const GeneratePrompts = { success, failed, chooseTenant, abort, missingApiKey, tenantsSpinner };
+function basesSpinner(state: SpinnerState, text?: string): void {
+  switch (state) {
+    case SpinnerState.Start:
+      basesSpinnerInstance.start(text);
+      break;
+    case SpinnerState.Succeed:
+      basesSpinnerInstance.succeed(text);
+      break;
+    case SpinnerState.Failed:
+      basesSpinnerInstance.fail(text);
+  }
+}
+
+function tablesSpinner(state: SpinnerState, text?: string): void {
+  switch (state) {
+    case SpinnerState.Start:
+      tablesSpinnerInstance.start(text);
+      break;
+    case SpinnerState.Succeed:
+      tablesSpinnerInstance.succeed(text);
+      break;
+    case SpinnerState.Failed:
+      tablesSpinnerInstance.fail(text);
+  }
+}
+
+function generationSpinner(state: SpinnerState, text?: string): void {
+  switch (state) {
+    case SpinnerState.Start:
+      generationSpinnerInstance.start(text);
+      break;
+    case SpinnerState.Succeed:
+      generationSpinnerInstance.succeed(text);
+      break;
+    case SpinnerState.Failed:
+      generationSpinnerInstance.fail(text);
+  }
+}
+
+export const GeneratePrompts = {
+  success,
+  failed,
+  chooseTenant,
+  abort,
+  missingApiKey,
+  tenantsSpinner,
+  basesSpinner,
+  tablesSpinner,
+  generationSpinner,
+};

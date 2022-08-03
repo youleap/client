@@ -9,13 +9,11 @@
     "build": "tsup src/index.ts && chmod +x dist/index.js",
     "dev": "npm run build && NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 dist/index.js",
     "clean": "rm -rf ./dist",
-    "type-check": "tsc --noEmit",
-    "prisma:generate": "prisma generate"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^4.1.1",
     "axios": "^0.27.2",
-    "prisma": "^4.1.1"
+    "dotenv": "^16.0.1"
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "^3.0.1",
