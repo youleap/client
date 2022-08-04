@@ -9,6 +9,7 @@ import { JwtPayload } from '../../interfaces/jwt.interface';
 import { TenantId } from '../../interfaces/tenant.interface';
 import { BaseResponseDto, TableResponseDto } from '../../dtos/base.dto';
 import { BaseId, TablesByBase } from '../../interfaces/base.interface';
+import { generatorHandler } from '../../handlers/generator/generator.handler';
 
 const apiKeyPath = path.join(__dirname, 'apiKey.txt');
 
@@ -32,11 +33,13 @@ export async function handleGenerateCommand(): Promise<void> {
     const bases = await fetchBasesHandler(jwt, tenantId);
     const tablesByBase = await fetchTablesHandler(jwt, bases);
 
-    
     GeneratePrompts.generationSpinner('Start', 'Generating SDK...');
+    await generatorHandler(jwt, tablesByBase);
+    GeneratePrompts.generationSpinner('Succeed', 'SDK generated successfully!');
 
     process.exit();
   } catch (e) {
+    console.log(e);
     GeneratePrompts.failed();
     process.exit();
   }
@@ -82,13 +85,15 @@ async function fetchTablesHandler(
   }>
 > {
   GeneratePrompts.tablesSpinner('Start', 'Fetching tables, please wait...');
-  const tablesByBase = await Promise.all(bases.map(async (base) => {
-    const tables = await getTablesByBaseId(jwt, base.id);
-    return {
-      ...base,
-      tables
-    };
-  }));
+  const tablesByBase = await Promise.all(
+    bases.map(async (base) => {
+      const tables = await getTablesByBaseId(jwt, base.id);
+      return {
+        ...base,
+        tables,
+      };
+    }),
+  );
   GeneratePrompts.tablesSpinner('Succeed', 'Fetched all tables successfully!');
 
   return tablesByBase;

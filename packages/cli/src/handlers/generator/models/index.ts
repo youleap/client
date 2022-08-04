@@ -1,1 +1,1 @@
-export * from './youleapClient.generator';
+export * from './youleap-client.generator';

@@ -9,7 +9,7 @@ export async function getTenantsByUserId(
   const options: AxiosRequestConfig = {
     method: 'GET',
     url: `https://gateway.youleap-local.io/organization/${organizationId}/tenants/members/${userId}`,
-    headers: { 'content-type': 'application/x-www-form-urlencoded', authorization: `Bearer ${accessToken}` },
+    headers: { 'content-type': 'application/json', authorization: `Bearer ${accessToken}` },
   };
 
   try {

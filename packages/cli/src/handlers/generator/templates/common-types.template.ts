@@ -1,4 +1,4 @@
-export const COMMON_TYPES_TEMPLATE = `
+export const COMMON_TYPES_TEMPLATE = /* ts */ `
 const SortOrder = {
     asc: 'asc',
     desc: 'desc',

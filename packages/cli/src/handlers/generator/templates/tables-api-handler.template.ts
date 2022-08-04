@@ -1,3 +1,5 @@
+const ts = (str: string) => str;
+
 export const TABLE_API_HANDLER = `
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
@@ -156,4 +158,4 @@ export class TableApiHandler {
   }
 }
 
-`
+`;

@@ -1,20 +1,26 @@
 import { Project } from 'ts-morph';
-import { TableResponseDto } from '../../dtos/base.dto';
-import { BaseId } from '../../interfaces/base.interface';
+import { TablesByBase } from '../../interfaces/base.interface';
+import { generateTableApiHandler } from './apis/table-api-handler.generator';
+import { generateBaseDelegateHandler } from './models/base-delegate.generator';
 import { generateYouleapClientHandler } from './models/youleap-client.generator';
 import { generateClientTypesHandler, generateCommonTypesHandler } from './types';
 
-export function generatorHandler(): void {
-  // export function generatorHandler(baseName: string, baseId: BaseId, tables: Array<TableResponseDto>): void {
+export async function generatorHandler(jwt: string, bases: Array<TablesByBase>): Promise<void> {
   const project = new Project();
   project.addSourceFilesAtPaths('sdk/src/**/*.ts');
 
   //* Generate YouleapClient *//
-  generateYouleapClientHandler(project, 'sdk/src/client/client.ts');
+  generateYouleapClientHandler(project, 'sdk/src/client/client.ts', bases);
+
+  //* Generate Bases *//
+  generateBaseDelegateHandler(project, 'sdk/src/client/bases', bases);
+
+  //* Generate API Handler *//
+  generateTableApiHandler(project, 'sdk/src/apis/tableApiHandler.ts');
 
   // //* Generate Types *//
   generateClientTypesHandler(project, 'sdk/src/types/client.ts');
   generateCommonTypesHandler(project, 'sdk/src/types/common.ts');
 
-  project.save();
+  await project.save();
 }

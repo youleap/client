@@ -1,77 +1,34 @@
-import { Project, Scope, StructureKind } from 'ts-morph';
+import { Project, Scope, StructureKind, WriterFunctionOrValue, Writers } from 'ts-morph';
+import { TablesByBase } from '../../../interfaces/base.interface';
+import { addDelegateSuffix } from '../../../utils/string-manipulation.utils';
 import { YOULEAP_CLIENT_TEMPLATE } from '../templates/youleap-client.template';
 
-export function generateYouleapClientHandler(project: Project, generationPath: string): void {
+export function generateYouleapClientHandler(
+  project: Project,
+  generationPath: string,
+  bases: Array<TablesByBase>,
+): void {
   const youleapClientClassFile = project.createSourceFile(generationPath, YOULEAP_CLIENT_TEMPLATE, { overwrite: true });
+  const youleapClientClass = youleapClientClassFile.getClassOrThrow('YouleapClient');
 
-  youleapClientClassFile.addImportDeclarations([
-    {
-      moduleSpecifier: '../types/client',
-      namedImports: ['YouleapClientOptions'],
-      isTypeOnly: true,
-    },
-    {
-      moduleSpecifier: '../types/common',
-      namedImports: ['ErrorFormat', 'LogDefinition', 'LogLevel'],
-      isTypeOnly: true,
-    },
-    {
-      moduleSpecifier: './databases',
-      namedImports: ['DatabaseDelegate'],
-    },
-  ]);
+  const dbInitializer: { [key: string]: WriterFunctionOrValue } = {};
+  for (const base of bases) {
+    dbInitializer[base.name.toLocaleLowerCase()] = (writer) => {
+      writer.writeLine(`new ${addDelegateSuffix(base.name)}(this.accessToken)`);
+    };
+  }
 
-  const youleapClientClass = youleapClientClassFile.addClass({
-    kind: StructureKind.Class,
-    name: 'YouleapClient',
-    isDefaultExport: true,
+  youleapClientClassFile.addImportDeclaration({
+    kind: StructureKind.ImportDeclaration,
+    moduleSpecifier: './bases',
+    namedImports: bases.map((base) => addDelegateSuffix(base.name)),
   });
-
-  youleapClientClass.addMembers([
-    {
-      kind: StructureKind.Property,
-      name: 'errorFormat',
-      type: 'ErrorFormat',
-      hasQuestionToken: true,
-      scope: Scope.Private,
-    },
-    {
-      kind: StructureKind.Property,
-      name: 'log',
-      type: 'Array<LogLevel | LogDefinition>',
-      hasQuestionToken: true,
-      scope: Scope.Private,
-    },
-    {
-      kind: StructureKind.Property,
-      name: 'accessToken',
-      type: 'string',
-      hasQuestionToken: true,
-      scope: Scope.Private,
-    },
-  ]);
-
-  youleapClientClass.addGetAccessor({
+  youleapClientClass.addProperty({
+    kind: StructureKind.Property,
     name: 'db',
-    returnType: 'DatabaseDelegate',
     scope: Scope.Public,
-    statements: 'return new DatabaseDelegate();',
+    initializer: Writers.object(dbInitializer),
   });
 
-  youleapClientClass.addConstructor({
-    kind: StructureKind.Constructor,
-    parameters: [
-      {
-        kind: StructureKind.Parameter,
-        name: 'args',
-        type: 'YouleapClientOptions',
-        hasQuestionToken: true,
-      },
-    ],
-    statements: (writer) => {
-      writer.writeLine('this.errorFormat = args?.errorFormat;');
-      writer.writeLine('this.log = args?.log;');
-      writer.writeLine('this.accessToken = args?.accessToken;');
-    },
-  });
+  youleapClientClassFile.formatText();
 }

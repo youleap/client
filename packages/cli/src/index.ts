@@ -4,14 +4,10 @@ import { handlePrintAccessTokenCommand } from './commands/auth/print-access-toke
 import { handleLogoutCommand } from './commands/auth/logout/index';
 import { handleGenerateCommand } from './commands/generate/index';
 import { Command } from 'commander';
-import { generatorHandler } from './handlers/generator/generator.handler';
-
 
 const program = new Command();
 
 program.name('youleap').description('Used to authenticate and manage your youleap resources.').version('1.0.0');
-
-generatorHandler();
 
 //==============[Authentication Commands]==============//
 
