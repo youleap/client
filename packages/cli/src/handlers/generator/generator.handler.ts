@@ -1,5 +1,5 @@
 import { Project } from 'ts-morph';
-import _ from 'lodash';
+import { flatten as _flatten, map as _map } from 'lodash';
 
 import { TablesByBase } from '../../interfaces/base.interface';
 
@@ -21,7 +21,7 @@ export async function generatorHandler(jwt: string, bases: Array<TablesByBase>):
   generateBaseDelegateHandler(project, 'sdk/src/client/bases', bases);
 
   //* Generate Bases *//
-  generateTableDelegateHandler(project, 'sdk/src/client/bases/tables', _.flatten(_.map(bases, 'tables')));
+  generateTableDelegateHandler(project, 'sdk/src/client/bases/tables', _flatten(_map(bases, 'tables')));
 
   //* Generate API Handler *//
   generateTableApiHandler(project, 'sdk/src/apis/tableApiHandler.ts');

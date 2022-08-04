@@ -1,8 +1,16 @@
-import { ClassDeclaration, Project, Scope, SourceFile, StructureKind } from 'ts-morph';
-import { capitalize as _capitalize } from 'lodash';
+import {
+  ClassDeclaration,
+  CodeBlockWriter,
+  MethodDeclarationStructure,
+  OptionalKind,
+  Project,
+  Scope,
+  SourceFile,
+  Writers,
+} from 'ts-morph';
 
 import { TableResponseDto } from '../../../dtos/base.dto';
-import { addDelegateSuffix } from '../../../utils/string-manipulation.utils';
+import { addDelegateSuffix, capitalize } from '../../../utils/string-manipulation.utils';
 
 export function generateTableDelegateHandler(
   project: Project,
@@ -30,7 +38,34 @@ export function generateTableDelegateHandler(
     handleTableImports(tableDelegateClassFile, table.name);
     handleTableProperties(tableDelegateClass, table.id);
     handleTableConstructor(tableDelegateClass);
+    handleTableMethods(tableDelegateClass, table.name);
+
+    tableDelegateClassFile.formatText({
+      placeOpenBraceOnNewLineForFunctions: true,
+    });
   }
+}
+
+function handleTableMethods(tableDelegateClass: ClassDeclaration, tableName: string): void {
+  const returnType = {
+    object: `Promise<CheckSelect<T, ${capitalize(tableName)}, ${capitalize(tableName)}GetPayload<T>>>`,
+    array: `Promise<CheckSelect<T, Array<${capitalize(tableName)}>, Array<${capitalize(tableName)}GetPayload<T>>>>`,
+    batch: `Promise<BatchPayload>`,
+  };
+
+  tableDelegateClass.addMethods([
+    tableMethodConfigGenerator(tableName, 'findUnique', returnType.object),
+    tableMethodConfigGenerator(tableName, 'findUniqueOrThrow', returnType.object),
+    tableMethodConfigGenerator(tableName, 'findFirst', returnType.object),
+    tableMethodConfigGenerator(tableName, 'findFirstOrThrow', returnType.object),
+    tableMethodConfigGenerator(tableName, 'findMany', returnType.array),
+    tableMethodConfigGenerator(tableName, 'create', returnType.object),
+    tableMethodConfigGenerator(tableName, 'createMany', returnType.batch),
+    tableMethodConfigGenerator(tableName, 'delete', returnType.object),
+    tableMethodConfigGenerator(tableName, 'deleteMany', returnType.batch),
+    tableMethodConfigGenerator(tableName, 'update', returnType.object),
+    tableMethodConfigGenerator(tableName, 'updateMany', returnType.batch),
+  ]);
 }
 
 function handleTableConstructor(tableDelegateClass: ClassDeclaration): void {
@@ -42,9 +77,7 @@ function handleTableConstructor(tableDelegateClass: ClassDeclaration): void {
         type: 'string',
       },
     ],
-    statements: (writer) => {
-      writer.writeLine('this.tableApiHandler = new TableApiHandler(accessToken);');
-    },
+    statements: 'this.tableApiHandler = new TableApiHandler(accessToken);',
   });
 }
 
@@ -75,16 +108,66 @@ function handleTableImports(tableDelegateClassFile: SourceFile, tableName: strin
       'BatchPayload',
       'CheckSelect',
       'SelectSubset',
-      `${_capitalize(tableName)}CreateArgs`,
-      `${_capitalize(tableName)}CreateManyArgs`,
-      `${_capitalize(tableName)}DeleteArgs`,
-      `${_capitalize(tableName)}DeleteMany`,
-      `${_capitalize(tableName)}FindFirstArgs`,
-      `${_capitalize(tableName)}FindManyArgs`,
-      `${_capitalize(tableName)}FindUniqueArgs`,
-      `${_capitalize(tableName)}GetPayload`,
-      `${_capitalize(tableName)}UpdateArgs`,
-      `${_capitalize(tableName)}UpdateManyArgs`,
+      `${capitalize(tableName)}`,
+      `${capitalize(tableName)}CreateArgs`,
+      `${capitalize(tableName)}CreateManyArgs`,
+      `${capitalize(tableName)}DeleteArgs`,
+      `${capitalize(tableName)}DeleteManyArgs`,
+      `${capitalize(tableName)}FindFirstArgs`,
+      `${capitalize(tableName)}FindManyArgs`,
+      `${capitalize(tableName)}FindUniqueArgs`,
+      `${capitalize(tableName)}GetPayload`,
+      `${capitalize(tableName)}UpdateArgs`,
+      `${capitalize(tableName)}UpdateManyArgs`,
     ],
   });
 }
+
+const tableMethodConfigGenerator = (
+  tableName: string,
+  functionName: string,
+  returnType: string,
+): OptionalKind<MethodDeclarationStructure> => {
+  const capitalizedFunctionName = capitalize(functionName.replace('OrThrow', ''));
+  const capitalizedTableName = capitalize(tableName);
+  const functionArgsTypeName = `${capitalizedTableName}${capitalizedFunctionName}Args`;
+
+  const statements = functionName.includes('OrThrow')
+    ? (writer: CodeBlockWriter) => {
+        writer.writeLine(/* ts */ `
+          const result = await this.tableApiHandler.findUniqueQueryApi<
+              SelectSubset<T, ${capitalize(tableName)}FindUniqueArgs>,
+              CheckSelect<T, ${capitalize(tableName)}, ${capitalize(tableName)}GetPayload<T>>
+              >(this.tableId, args);
+        `);
+        writer.writeLine('if (result != null || result != {})');
+        writer.block(() => {
+          writer.writeLine('return result;');
+        });
+        writer.writeLine('throw new Error("Could not find unique document.");');
+      }
+    : Writers.returnStatement(
+        `await this.tableApiHandler.${functionName.replace('OrThrow', '')}QueryApi(this.tableId, args);`,
+      );
+
+  return {
+    name: functionName,
+    isAsync: true,
+    scope: Scope.Public,
+    parameters: [
+      {
+        name: 'args',
+        hasQuestionToken: true,
+        type: `SelectSubset<T, ${functionArgsTypeName}>`,
+      },
+    ],
+    typeParameters: [
+      {
+        name: 'T',
+        constraint: `${functionArgsTypeName}`,
+      },
+    ],
+    returnType,
+    statements,
+  };
+};
