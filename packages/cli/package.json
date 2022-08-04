@@ -22,12 +22,14 @@
     "commander": "^9.4.0",
     "fastify": "^4.2.1",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "open": "^8.4.0",
     "ora": "5.4.1",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "^3.0.1",
+    "@types/lodash": "^4.14.182",
     "@types/prompts": "^2.0.14",
     "ts-morph": "^15.1.0",
     "tsup": "^6.1.3",
