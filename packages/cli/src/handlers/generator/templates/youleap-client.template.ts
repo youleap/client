@@ -1,5 +1,5 @@
 export const YOULEAP_CLIENT_TEMPLATE = /* ts */ `
-import { ErrorFormat, LogDefinition, LogLevel, YouleapClientOptions } from '../types/index';
+import { ErrorFormat, LogDefinition, LogLevel, YouleapClientOptions } from '../types';
 
 export class YouleapClient {
   private errorFormat?: ErrorFormat;

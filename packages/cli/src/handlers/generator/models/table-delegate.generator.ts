@@ -2,7 +2,7 @@ import { Project, Scope, StructureKind } from 'ts-morph';
 import { TablesByBase } from '../../../interfaces/base.interface';
 import { addDelegateSuffix } from '../../../utils/string-manipulation.utils';
 
-export function generateBaseDelegateHandler(
+export function generateTableDelegateHandler(
   project: Project,
   generationPath: string,
   bases: Array<TablesByBase>,
