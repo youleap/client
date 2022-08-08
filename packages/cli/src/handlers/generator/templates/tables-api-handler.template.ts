@@ -5,20 +5,17 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export class TableApiHandler {
   private axiosInstance: AxiosInstance;
-
-  constructor(accessToken?: string, baseUrl?: string) {
-    if ((accessToken ?? process.env['ACCESS_TOKEN']) == null) {
+  
+  constructor(accessToken?: string) {
+    if ((accessToken ?? this.accessToken) == null) {
       throw new Error('Access token was not provided, please authenticate to the cli "youleap auth login"');
     }
 
-    if ((baseUrl ?? process.env['BASE_URL']) == null) {
-      throw new Error('Base url was not provided, please try to re-run sdk generation "youleap generate"');
-    }
     this.axiosInstance = axios.create({
-      baseURL: baseUrl ?? process.env['BASE_URL'],
+      baseURL: this.baseUrl,
       responseType: 'json',
       headers: {
-        authorization: \`Bearer \${accessToken ?? process.env['BASE_URL']}\`,
+        authorization: \`Bearer \${accessToken ?? this.accessToken}\`,
       },
     });
   }

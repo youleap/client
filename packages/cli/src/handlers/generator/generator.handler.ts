@@ -46,7 +46,7 @@ export async function generatorHandler(jwt: string, bases: Array<TablesByBase>):
   project.createSourceFile(`${basePath}/src/index.ts`, "export * from './client/client';", { overwrite: true });
 
   //// Generate Outside index.ts
-  //TODO: Embed baseUrl and accessToken in baseApiHandler
+  //// Embed baseUrl and accessToken in baseApiHandler
   //// Generate tsconfig
   //TODO: Generate package.json
   //// Generate node_modules
