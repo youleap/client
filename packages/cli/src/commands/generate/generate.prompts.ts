@@ -7,6 +7,10 @@ import { TenantResponseDto } from '../../dtos/tenant.dto';
 import { SpinnerState } from '../../interfaces/spinner.interface';
 
 const warning = chalk.hex('#FFA500');
+const codeSyntaxString = chalk.hex('#a5d6ff');
+const codeSyntaxKeyword = chalk.hex('#ff7b72');
+const codeSyntaxVariable = chalk.hex('#ffa657');
+
 const tenantSpinnerInstance: Ora = ora();
 const basesSpinnerInstance: Ora = ora();
 const tablesSpinnerInstance: Ora = ora();
@@ -19,7 +23,6 @@ async function chooseTenant(tenants: Array<TenantResponseDto>): Promise<TenantId
   if (tenants.length === 1) {
     return tenants[0]!.id;
   }
-  console.log();
   const result = await prompts({
     type: 'select',
     name: 'value',
@@ -37,9 +40,17 @@ async function chooseTenant(tenants: Array<TenantResponseDto>): Promise<TenantId
   return result.value;
 }
 
-function success(tenantName: string): void {
+function sdkUsage(): void {
   console.log();
-  console.log(chalk.green(`✅ Successfully generated sdk types for ${tenantName}!`));
+  console.log(
+    `${codeSyntaxKeyword('import')} { ${codeSyntaxVariable('YouleapClient')} } from ${codeSyntaxString(
+      '"@youleap/client"',
+    )};`,
+  );
+  console.log(
+    `${codeSyntaxKeyword('const')} youleap = ${codeSyntaxKeyword('new')} ${codeSyntaxVariable('YouleapClient')}();`,
+  );
+  console.log();
 }
 
 function failed(): void {
@@ -111,7 +122,7 @@ function generationSpinner(state: SpinnerState, text?: string): void {
 }
 
 export const GeneratePrompts = {
-  success,
+  sdkUsage,
   failed,
   chooseTenant,
   abort,

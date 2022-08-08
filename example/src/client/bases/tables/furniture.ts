@@ -28,7 +28,6 @@ export class FurnitureDelegate {
     return await this.tableApiHandler.findUniqueQueryApi(this.tableId, args);
   }
 
-  
   async findUniqueOrThrow<T extends FurnitureFindUniqueArgs>(
     args?: SelectSubset<T, FurnitureFindUniqueArgs>,
   ): Promise<CheckSelect<T, Furniture, FurnitureGetPayload<T>>> {

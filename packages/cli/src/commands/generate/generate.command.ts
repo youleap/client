@@ -8,8 +8,9 @@ import { getBasesByTenantId, getTablesByBaseId } from '../../apis/base.api';
 import { JwtPayload } from '../../interfaces/jwt.interface';
 import { TenantId } from '../../interfaces/tenant.interface';
 import { BaseResponseDto, TableResponseDto } from '../../dtos/base.dto';
-import { BaseId, TablesByBase } from '../../interfaces/base.interface';
+import { BaseId } from '../../interfaces/base.interface';
 import { generatorHandler } from '../../handlers/generator/generator.handler';
+import { configUtility } from '../../utils/config.utils';
 
 const apiKeyPath = path.join(__dirname, 'apiKey.txt');
 
@@ -19,12 +20,6 @@ export async function handleGenerateCommand(): Promise<void> {
     process.exit();
   }
 
-  //// validate access token (jwt)
-  //// try to fetch tenants from base service.
-  //// ask to select tenant.
-  //// try to fetch tenant bases and apis and functions.
-  //TODO: try to generate types.
-  //TODO: success.
   const jwt = fs.readFileSync(apiKeyPath, { encoding: 'utf-8' });
   try {
     const decodedJwt = jwtDecode<JwtPayload>(jwt);
@@ -34,8 +29,15 @@ export async function handleGenerateCommand(): Promise<void> {
     const tablesByBase = await fetchTablesHandler(jwt, bases);
 
     GeneratePrompts.generationSpinner('Start', 'Generating SDK...');
+    const sdkGenerationStartEpoch = Date.now();
     await generatorHandler(jwt, tablesByBase);
-    GeneratePrompts.generationSpinner('Succeed', 'SDK generated successfully!');
+    GeneratePrompts.generationSpinner(
+      'Succeed',
+      `Youleap sdk version ${configUtility.sdkVersion} was successfully generated in ${
+        Date.now() - sdkGenerationStartEpoch
+      }ms!`,
+    );
+    GeneratePrompts.sdkUsage();
 
     process.exit();
   } catch (e) {

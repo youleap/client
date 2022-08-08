@@ -1,9 +1,11 @@
-export const TABLE_API_HANDLER = `
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 export class TableApiHandler {
   private axiosInstance: AxiosInstance;
-  
+
+  private baseUrl: string = '';
+  private accessToken: string = '';
+
   constructor(accessToken?: string) {
     if ((accessToken ?? this.accessToken) == null) {
       throw new Error('Access token was not provided, please authenticate to the cli "youleap auth login"');
@@ -13,14 +15,14 @@ export class TableApiHandler {
       baseURL: this.baseUrl,
       responseType: 'json',
       headers: {
-        authorization: \`Bearer \${accessToken ?? this.accessToken}\`,
+        authorization: `Bearer ${accessToken ?? this.accessToken}`,
       },
     });
   }
   public async findUniqueQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'GET',
-      url: \`/base/table/\${tableId}/query/unique\`,
+      url: `/base/table/${tableId}/query/unique`,
       data: args,
     };
 
@@ -35,7 +37,7 @@ export class TableApiHandler {
   public async findFirstQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'GET',
-      url: \`/base/table/\${tableId}/query\`,
+      url: `/base/table/${tableId}/query`,
       data: args,
     };
 
@@ -50,7 +52,7 @@ export class TableApiHandler {
   public async findManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'GET',
-      url: \`/base/table/\${tableId}/query/many\`,
+      url: `/base/table/${tableId}/query/many`,
       data: args,
     };
 
@@ -65,7 +67,7 @@ export class TableApiHandler {
   public async createQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'POST',
-      url: \`/base/table/\${tableId}/query\`,
+      url: `/base/table/${tableId}/query`,
       data: args,
     };
 
@@ -80,7 +82,7 @@ export class TableApiHandler {
   public async createManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'POST',
-      url: \`/base/table/\${tableId}/query/many\`,
+      url: `/base/table/${tableId}/query/many`,
       data: args,
     };
 
@@ -95,7 +97,7 @@ export class TableApiHandler {
   public async deleteQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'DELETE',
-      url: \`/base/table/\${tableId}/query\`,
+      url: `/base/table/${tableId}/query`,
       data: args,
     };
 
@@ -110,7 +112,7 @@ export class TableApiHandler {
   public async deleteManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'DELETE',
-      url: \`/base/table/\${tableId}/query/many\`,
+      url: `/base/table/${tableId}/query/many`,
       data: args,
     };
 
@@ -125,7 +127,7 @@ export class TableApiHandler {
   public async updateQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'PATCH',
-      url: \`/base/table/\${tableId}/query/many\`,
+      url: `/base/table/${tableId}/query/many`,
       data: args,
     };
 
@@ -140,7 +142,7 @@ export class TableApiHandler {
   public async updateManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
       method: 'PATCH',
-      url: \`/base/table/\${tableId}/query/many\`,
+      url: `/base/table/${tableId}/query/many`,
       data: args,
     };
 
@@ -152,5 +154,3 @@ export class TableApiHandler {
     }
   }
 }
-
-`;

@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "apps/frontend",
-    "apps/backend/*",
-    "packages/*"
+    "packages/*",
+    "example/*"
   ],
   "maintainers": [
     "Kevin Orel Edry <kevin@youleap.com>",
@@ -22,7 +21,9 @@
     "*.{ts,tsx,css,html,md,json,js}": "prettier --write",
     "apps/frontend/src/pages/**.tsx": "pnpm run frontend:generate-pages-types"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@youleap/sdk": "./packages/sdk"
+  },
   "jira-prepare-commit-msg": {
     "messagePattern": "$J - $M"
   }

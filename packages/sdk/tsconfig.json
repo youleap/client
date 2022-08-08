@@ -1,0 +1,9 @@
+{
+  "extends": "@sindresorhus/tsconfig",
+  "compilerOptions": {
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "declaration": true,
+    "outDir": "dist"
+  }
+}
