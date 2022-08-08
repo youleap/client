@@ -1,6 +1,8 @@
 import path from 'path';
 import fs from 'fs';
 import jwtDecode from 'jwt-decode';
+import { isError as _isError } from 'lodash';
+import { getInstalledPath } from 'get-installed-path';
 
 import { GeneratePrompts } from './generate.prompts';
 import { getTenantsByUserId } from '../../apis/tenant.api';
@@ -23,6 +25,7 @@ export async function handleGenerateCommand(): Promise<void> {
   const jwt = fs.readFileSync(apiKeyPath, { encoding: 'utf-8' });
   try {
     const decodedJwt = jwtDecode<JwtPayload>(jwt);
+    const sdkInstallationPath = await getInstalledPath('@youleap/sdk', { local: true });
 
     const tenantId = await fetchTenantsHandler(jwt, decodedJwt.org_id, decodedJwt.sub);
     const bases = await fetchBasesHandler(jwt, tenantId);
@@ -30,7 +33,7 @@ export async function handleGenerateCommand(): Promise<void> {
 
     GeneratePrompts.generationSpinner('Start', 'Generating SDK...');
     const sdkGenerationStartEpoch = Date.now();
-    await generatorHandler(jwt, tablesByBase);
+    await generatorHandler(jwt, tablesByBase, sdkInstallationPath);
     GeneratePrompts.generationSpinner(
       'Succeed',
       `Youleap sdk version ${configUtility.sdkVersion} was successfully generated in ${
@@ -40,9 +43,12 @@ export async function handleGenerateCommand(): Promise<void> {
     GeneratePrompts.sdkUsage();
 
     process.exit();
-  } catch (e) {
-    console.log(e);
+  } catch (e: unknown) {
+    if (_isError(e) && e.message.includes('get-installed-path')) {
+      GeneratePrompts.missingSDKInstalled();
+    }
     GeneratePrompts.failed();
+    console.log(e);
     process.exit();
   }
 }

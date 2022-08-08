@@ -68,6 +68,15 @@ function missingApiKey(): void {
   console.log(warning('⚠️  You need to authenticate in order to generate types.'));
   console.log('Authentication command:', chalk.bold('youleap auth login'));
 }
+function missingSDKInstalled(): void {
+  console.log();
+  console.log(
+    warning(
+      "⚠️  You need to install the Youleap SDK locally before generating it's types:",
+      chalk.white('`npm install @youleap/sdk`'),
+    ),
+  );
+}
 
 function tenantsSpinner(state: SpinnerState, text?: string): void {
   switch (state) {
@@ -124,6 +133,7 @@ function generationSpinner(state: SpinnerState, text?: string): void {
 export const GeneratePrompts = {
   sdkUsage,
   failed,
+  missingSDKInstalled,
   chooseTenant,
   abort,
   missingApiKey,

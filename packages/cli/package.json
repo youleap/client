@@ -26,6 +26,7 @@
     "commander": "^9.4.0",
     "dotenv": "^16.0.1",
     "fastify": "^4.2.1",
+    "get-installed-path": "^4.0.8",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "open": "^8.4.0",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "^3.0.1",
+    "@types/get-installed-path": "^4.0.1",
     "@types/lodash": "^4.14.182",
     "@types/prompts": "^2.0.14",
     "ts-morph": "^15.1.0",

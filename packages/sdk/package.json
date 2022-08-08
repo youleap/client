@@ -4,6 +4,9 @@
   "exports": {
     ".": "./dist/index.js"
   },
+  "scripts": {
+    "build": "tsc"
+  },
   "types": "./dist/index.d.ts",
   "dependencies": {
     "axios": "^0.27.2"
