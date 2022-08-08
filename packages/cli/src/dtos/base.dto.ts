@@ -1,12 +1,23 @@
 import { BaseId, ColumnName, TableId } from '../interfaces/base.interface';
 
-export enum ColumnTypeEnum {
-  Text = 'Text',
+export enum ColumnType {
+  SingleLineText = 'SingleLineText',
+  LongText = 'LongText',
+  Attachment = 'Attachment',
+  Checkbox = 'Checkbox',
+  MultipleSelect = 'MultipleSelect',
+  SingleSelect = 'SingleSelect',
+  PhoneNumber = 'PhoneNumber',
+  Email = 'Email',
+  URL = 'URL',
+  Currency = 'Currency',
+  Percent = 'Percent',
+  CreatedTime = 'CreatedTime',
+  CreatedBy = 'CreatedBy',
+  LastModifiedBy = 'LastModifiedBy',
   Number = 'Number',
   Date = 'Date',
-  Boolean = 'Boolean',
 }
-
 export interface BaseResponseDto {
   id: BaseId;
   name: string;
@@ -20,5 +31,8 @@ export interface TableResponseDto {
 
 export interface Column {
   name: ColumnName;
-  type: ColumnTypeEnum;
+  type: ColumnType;
+  required: boolean;
+  unique: boolean;
+  default: unknown | null;
 }

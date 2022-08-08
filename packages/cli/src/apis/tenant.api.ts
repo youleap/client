@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { TenantResponseDto } from '../dtos/tenant.dto';
+import { configUtility } from '../utils/config.utils';
 
 export async function getTenantsByUserId(
   accessToken: string,
@@ -8,7 +9,8 @@ export async function getTenantsByUserId(
 ): Promise<Array<TenantResponseDto>> {
   const options: AxiosRequestConfig = {
     method: 'GET',
-    url: `https://gateway.youleap-local.io/organization/${organizationId}/tenants/members/${userId}`,
+    baseURL: configUtility.youleapApiBaseUrl,
+    url: `organization/${organizationId}/tenants/members/${userId}`,
     headers: { 'content-type': 'application/json', authorization: `Bearer ${accessToken}` },
   };
 

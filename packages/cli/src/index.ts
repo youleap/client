@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import 'dotenv/config';
 import { handleLoginCommand } from './commands/auth/login/index';
 import { handlePrintAccessTokenCommand } from './commands/auth/print-access-token/index';
 import { handleLogoutCommand } from './commands/auth/logout/index';

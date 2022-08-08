@@ -9,6 +9,8 @@ import {
   XOR,
   StringFieldUpdateOperationsInput,
   Merge,
+  BoolFieldUpdateOperationsInput,
+  IntFieldUpdateOperationsInput,
 } from './common';
 
 /**
@@ -59,7 +61,6 @@ export type FurnitureFindManyArgs = {
   cursor?: FurnitureWhereUniqueInput;
   take?: number;
   skip?: number;
-  distinct?: Enumerable<FurnitureScalarFieldEnum>;
 };
 
 /**
@@ -69,7 +70,6 @@ export type FurnitureFindFirstArgs = {
   select?: FurnitureSelect | null;
   where?: FurnitureWhereInput;
   skip?: number;
-  distinct?: Enumerable<FurnitureScalarFieldEnum>;
 };
 
 /**
@@ -127,23 +127,6 @@ export type FurnitureDeleteArgs = {
  */
 export type FurnitureDeleteManyArgs = {
   where?: FurnitureWhereInput;
-};
-
-export type FurnitureCountArgs = Merge<
-  Omit<FurnitureFindManyArgs, 'select' | 'include'> & {
-    select?: FurnitureCountAggregateInputType | true;
-  }
->;
-
-export type FurnitureCountAggregateInputType = {
-  id?: true;
-  name?: true;
-  type?: true;
-  images?: true;
-  vendor?: true;
-  inStock?: true;
-  unitCost?: true;
-  _all?: true;
 };
 
 export type FurnitureCreateManyInput = {
@@ -216,16 +199,6 @@ export type FurnitureUncheckedCreateInput = {
   unitCost: number;
 };
 
-export enum FurnitureScalarFieldEnum {
-  id = 'id',
-  name = 'name',
-  type = 'type',
-  images = 'images',
-  vendor = 'vendor',
-  inStock = 'inStock',
-  unitCost = 'unitCost',
-}
-
 export type FurnitureWhereInput = {
   AND?: Enumerable<FurnitureWhereInput>;
   OR?: Enumerable<FurnitureWhereInput>;
@@ -249,21 +222,6 @@ export type FurnitureOrderByWithRelationInput = {
   unitCost?: SortOrder;
 };
 
-export type FurnitureOrderByWithAggregationInput = {
-  id?: SortOrder;
-  name?: SortOrder;
-  type?: SortOrder;
-  images?: SortOrder;
-  vendor?: SortOrder;
-  inStock?: SortOrder;
-  unitCost?: SortOrder;
-  _count?: FurnitureCountOrderByAggregateInput;
-  _avg?: FurnitureAvgOrderByAggregateInput;
-  _max?: FurnitureMaxOrderByAggregateInput;
-  _min?: FurnitureMinOrderByAggregateInput;
-  _sum?: FurnitureSumOrderByAggregateInput;
-};
-
 export type FurnitureSelect = {
   id?: boolean;
   name?: boolean;
@@ -272,57 +230,6 @@ export type FurnitureSelect = {
   vendor?: boolean;
   inStock?: boolean;
   unitCost?: boolean;
-};
-
-export type FurnitureCountOrderByAggregateInput = {
-  id?: SortOrder;
-  name?: SortOrder;
-  type?: SortOrder;
-  images?: SortOrder;
-  vendor?: SortOrder;
-  inStock?: SortOrder;
-  unitCost?: SortOrder;
-};
-
-export type FurnitureCountAggregateOutputType = {
-  id: number;
-  name: number;
-  type: number;
-  images: number;
-  vendor: number;
-  inStock: number;
-  unitCost: number;
-  _all: number;
-};
-
-export type CountOrderByAggregateInput<T> = {
-  [P in keyof T]: SortOrder;
-};
-
-export type FurnitureAvgOrderByAggregateInput = {
-  unitCost?: SortOrder;
-};
-
-export type FurnitureMaxOrderByAggregateInput = {
-  id?: SortOrder;
-  name?: SortOrder;
-  type?: SortOrder;
-  vendor?: SortOrder;
-  inStock?: SortOrder;
-  unitCost?: SortOrder;
-};
-
-export type FurnitureMinOrderByAggregateInput = {
-  id?: SortOrder;
-  name?: SortOrder;
-  type?: SortOrder;
-  vendor?: SortOrder;
-  inStock?: SortOrder;
-  unitCost?: SortOrder;
-};
-
-export type FurnitureSumOrderByAggregateInput = {
-  unitCost?: SortOrder;
 };
 
 export type EnumFurnitureTypesFilter = {
@@ -368,16 +275,4 @@ export type EnumFurnitureTypesFieldUpdateOperationsInput = {
 export type FurnitureUpdateImagesInput = {
   set?: Enumerable<string>;
   push?: string | Enumerable<string>;
-};
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean;
-};
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number;
-  increment?: number;
-  decrement?: number;
-  multiply?: number;
-  divide?: number;
 };

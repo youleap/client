@@ -1,5 +1,6 @@
-import { Project } from 'ts-morph';
+import { ModuleKind, Project } from 'ts-morph';
 import { flatten as _flatten, map as _map } from 'lodash';
+import path from 'path';
 
 import { TablesByBase } from '../../interfaces/base.interface';
 
@@ -9,27 +10,47 @@ import { generateTableDelegateHandler } from './models/table-delegate.generator'
 import { generateYouleapClientHandler } from './models/youleap-client.generator';
 import { generateClientTypesHandler } from './types/client-types.generator';
 import { generateCommonTypesHandler } from './types/common-types.generator';
+import { generateTableTypesHandler } from './types/table-types.generator';
 
 export async function generatorHandler(jwt: string, bases: Array<TablesByBase>): Promise<void> {
-  const project = new Project();
-  project.addSourceFilesAtPaths('sdk/src/**/*.ts');
+  const project = new Project({
+    compilerOptions: {
+      declaration: true,
+      module: ModuleKind.CommonJS,
+      esModuleInterop: true,
+    },
+  });
+
+  const basePath = path.resolve(__dirname, '..', '..', 'sdk');
+
+  project.addSourceFilesAtPaths(`${basePath}/src/**/*.ts`);
 
   //* Generate YouleapClient *//
-  generateYouleapClientHandler(project, 'sdk/src/client/client.ts', bases);
+  generateYouleapClientHandler(project, `${basePath}/src/client/client.ts`, bases);
 
   //* Generate Bases *//
-  generateBaseDelegateHandler(project, 'sdk/src/client/bases', bases);
+  generateBaseDelegateHandler(project, `${basePath}/src/client/bases`, bases);
 
   //* Generate Bases *//
-  generateTableDelegateHandler(project, 'sdk/src/client/bases/tables', _flatten(_map(bases, 'tables')));
+  generateTableDelegateHandler(project, `${basePath}/src/client/bases/tables`, _flatten(_map(bases, 'tables')));
 
   //* Generate API Handler *//
-  generateTableApiHandler(project, 'sdk/src/apis/tableApiHandler.ts');
+  generateTableApiHandler(project, `${basePath}/src/apis/tableApiHandler.ts`, jwt);
 
-  // //* Generate Types *//
-  const typesIndexExportFile = project.createSourceFile('sdk/src/types/index.ts', '', { overwrite: true });
-  generateClientTypesHandler(project, 'sdk/src/types/client.ts', typesIndexExportFile);
-  generateCommonTypesHandler(project, 'sdk/src/types/common.ts', typesIndexExportFile);
+  //* Generate Types *//
+  const typesIndexExportFile = project.createSourceFile(`${basePath}/src/types/index.ts`, '', { overwrite: true });
+  generateClientTypesHandler(project, `${basePath}/src/types/client.ts`, typesIndexExportFile);
+  generateCommonTypesHandler(project, `${basePath}/src/types/common.ts`, typesIndexExportFile);
+  generateTableTypesHandler(project, `${basePath}/src/types`, _flatten(_map(bases, 'tables')), typesIndexExportFile);
 
-  await project.save();
+  project.createSourceFile(`${basePath}/src/index.ts`, "export * from './client/client';", { overwrite: true });
+
+  //// Generate Outside index.ts
+  //TODO: Embed baseUrl and accessToken in baseApiHandler
+  //// Generate tsconfig
+  //TODO: Generate package.json
+  //// Generate node_modules
+  //// Build TS
+  //// Move to SDK folder
+  await project.emit();
 }

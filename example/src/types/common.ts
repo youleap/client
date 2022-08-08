@@ -50,6 +50,46 @@ export type StringNullableListFilter = {
   isEmpty?: boolean;
 };
 
+export type BoolNullableListFilter = {
+  equals?: Enumerable<boolean> | null;
+  has?: boolean | null;
+  hasEvery?: Enumerable<boolean>;
+  hasSome?: Enumerable<boolean>;
+  isEmpty?: boolean;
+};
+
+export type IntNullableListFilter = {
+  equals?: Enumerable<number> | null;
+  has?: number | null;
+  hasEvery?: Enumerable<number>;
+  hasSome?: Enumerable<number>;
+  isEmpty?: number;
+};
+
+export type StringListFilter = {
+  equals?: Enumerable<string>;
+  has?: string;
+  hasEvery?: Enumerable<string>;
+  hasSome?: Enumerable<string>;
+  isEmpty?: boolean;
+};
+
+export type BoolListFilter = {
+  equals?: Enumerable<boolean>;
+  has?: boolean;
+  hasEvery?: Enumerable<boolean>;
+  hasSome?: Enumerable<boolean>;
+  isEmpty?: boolean;
+};
+
+export type IntListFilter = {
+  equals?: Enumerable<number>;
+  has?: number;
+  hasEvery?: Enumerable<number>;
+  hasSome?: Enumerable<number>;
+  isEmpty?: number;
+};
+
 export type HasSelect = {
   select: any;
 };
@@ -252,3 +292,15 @@ export type GetScalarType<T, O> = O extends object
       [P in keyof T]: P extends keyof O ? O[P] : never;
     }
   : never;
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean;
+};
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number;
+  increment?: number;
+  decrement?: number;
+  multiply?: number;
+  divide?: number;
+};

@@ -1,10 +1,12 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { Auth0TokenResponseDto } from '../dtos/token.dto';
+import { configUtility } from '../utils/config.utils';
 
 export async function getToken(code: string, clientId: string, codeVerifier: string): Promise<string> {
   const options: AxiosRequestConfig = {
     method: 'POST',
-    url: 'https://youleap.eu.auth0.com/oauth/token',
+    baseURL: configUtility.auth0ApiBaseUrl,
+    url: 'oauth/token',
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
     data: new URLSearchParams({
       grant_type: 'authorization_code',
