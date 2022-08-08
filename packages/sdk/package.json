@@ -5,7 +5,8 @@
     ".": "./dist/index.js"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "tsc"
   },
   "types": "./dist/index.d.ts",
   "dependencies": {

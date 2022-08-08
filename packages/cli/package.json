@@ -7,14 +7,14 @@
   },
   "scripts": {
     "build": "tsup src/index.ts && cp -r src/assets ./dist && chmod +x dist/index.js",
-    "help": "npm run build && dist/index.js help",
-    "auth:help": "npm run build && dist/index.js auth help",
-    "auth:login": "npm run build && dist/index.js auth login",
-    "auth:print-access-token": "npm run build && dist/index.js auth print-access-token",
-    "auth:logout": "npm run build && dist/index.js auth logout",
-    "generate": "npm run build && NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 dist/index.js generate",
+    "help": "pnpm run build && dist/index.js help",
+    "auth:help": "pnpm run build && dist/index.js auth help",
+    "auth:login": "pnpm run build && dist/index.js auth login",
+    "auth:print-access-token": "pnpm run build && dist/index.js auth print-access-token",
+    "auth:logout": "pnpm run build && dist/index.js auth logout",
+    "generate": "pnpm run build && NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 dist/index.js generate",
     "prisma": "prisma generate",
-    "postinstall": "npm run build"
+    "postinstall": "tsup src/index.ts && cp -r src/assets ./dist"
   },
   "files": [
     "dist/index.js"

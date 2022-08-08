@@ -14,17 +14,11 @@
     "node": ">=14.17",
     "pnpm": ">=7.3.0 <8"
   },
-  "scripts": {
-    "generate": "pnpm run --filter @youleap/cli generate"
-  },
   "lint-staged": {
     "**/package.json": "pnpm run sync-packages && :",
     "*.{ts,tsx,md}": "eslint --max-warnings=0 --cache --fix",
     "*.{ts,tsx,css,html,md,json,js}": "prettier --write",
     "apps/frontend/src/pages/**.tsx": "pnpm run frontend:generate-pages-types"
-  },
-  "devDependencies": {
-    "@youleap/sdk": "./packages/sdk"
   },
   "jira-prepare-commit-msg": {
     "messagePattern": "$J - $M"
