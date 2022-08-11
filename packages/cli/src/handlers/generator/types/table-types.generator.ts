@@ -98,7 +98,7 @@ function handleTableCrudTypes(tableTypesFile: SourceFile, tableName: string): vo
       name: `${capitalizedTableName}UpdateArgs`,
       type: Writers.object({
         'select?': Writers.unionType(`${capitalizedTableName}Select`, 'null'),
-        data: `Enumerable<${capitalizedTableName}CreateManyInput>`,
+        data: `Enumerable<${capitalizedTableName}UpdateInput>`,
         where: `${capitalizedTableName}WhereUniqueInput`,
       }),
       isExported: true,

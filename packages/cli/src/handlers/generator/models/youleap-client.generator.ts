@@ -8,8 +8,17 @@ export function generateYouleapClientHandler(
   generationPath: string,
   bases: Array<TablesByBase>,
 ): void {
-  const youleapClientClassFile = project.createSourceFile(generationPath, YOULEAP_CLIENT_TEMPLATE, { overwrite: true });
+  project.createSourceFile(`${generationPath}/index.ts`, 'export * from "./client";', { overwrite: true });
+  const youleapClientClassFile = project.createSourceFile(`${generationPath}/client.ts`, YOULEAP_CLIENT_TEMPLATE, {
+    overwrite: true,
+  });
   const youleapClientClass = youleapClientClassFile.getClassOrThrow('YouleapClient');
+
+  youleapClientClassFile.addImportDeclaration({
+    kind: StructureKind.ImportDeclaration,
+    moduleSpecifier: './bases',
+    namedImports: bases.map((base) => addDelegateSuffix(base.name)),
+  });
 
   const dbInitializer: { [key: string]: WriterFunctionOrValue } = {};
   for (const base of bases) {
@@ -18,11 +27,6 @@ export function generateYouleapClientHandler(
     };
   }
 
-  youleapClientClassFile.addImportDeclaration({
-    kind: StructureKind.ImportDeclaration,
-    moduleSpecifier: './bases',
-    namedImports: bases.map((base) => addDelegateSuffix(base.name)),
-  });
   youleapClientClass.addProperty({
     kind: StructureKind.Property,
     name: 'db',

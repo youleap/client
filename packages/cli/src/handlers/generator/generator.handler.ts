@@ -1,6 +1,6 @@
 import { ModuleKind, Project } from 'ts-morph';
 import { flatten as _flatten, map as _map } from 'lodash';
-import path from 'path';
+import fs from 'fs/promises';
 
 import { TablesByBase } from '../../interfaces/base.interface';
 
@@ -17,6 +17,8 @@ export async function generatorHandler(
   bases: Array<TablesByBase>,
   sdkInstallationPath: string,
 ): Promise<void> {
+  await fs.rm(`${sdkInstallationPath}/dist`, { recursive: true, force: true });
+
   const project = new Project({
     compilerOptions: {
       module: ModuleKind.CommonJS,
@@ -25,16 +27,29 @@ export async function generatorHandler(
     },
   });
 
+  project
+    .createSourceFile(`${sdkInstallationPath}/dist/index.ts`, '', {
+      overwrite: true,
+    })
+    .addExportDeclaration({
+      namedExports: ['YouleapClient'],
+      moduleSpecifier: './client',
+    });
+
   project.addSourceFilesAtPaths(`${sdkInstallationPath}/dist/**/*.ts`);
 
   //* Generate YouleapClient *//
-  generateYouleapClientHandler(project, `${sdkInstallationPath}/dist/client/client.ts`, bases);
+  generateYouleapClientHandler(project, `${sdkInstallationPath}/dist/client`, bases);
 
   //* Generate Bases *//
   generateBaseDelegateHandler(project, `${sdkInstallationPath}/dist/client/bases`, bases);
 
-  //* Generate Bases *//
-  generateTableDelegateHandler(project, `${sdkInstallationPath}/dist/client/bases/tables`, _flatten(_map(bases, 'tables')));
+  //* Generate Table *//
+  generateTableDelegateHandler(
+    project,
+    `${sdkInstallationPath}/dist/client/bases/tables`,
+    _flatten(_map(bases, 'tables')),
+  );
 
   //* Generate API Handler *//
   generateTableApiHandler(project, `${sdkInstallationPath}/dist/apis/tableApiHandler.ts`, jwt);
@@ -51,8 +66,6 @@ export async function generatorHandler(
     _flatten(_map(bases, 'tables')),
     typesIndexExportFile,
   );
-
-  project.createSourceFile(`${sdkInstallationPath}/dist/index.ts`, "export * from './client/client';", { overwrite: true });
 
   await project.emit();
 }

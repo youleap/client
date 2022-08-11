@@ -55,7 +55,10 @@ function sdkUsage(): void {
 
 function failed(): void {
   console.log();
-  console.log(chalk.red('❌ Failed to generate types.'));
+  console.log(
+    chalk.red('❌ Failed to generate types, This might issue might be caused by our end, please open a new issue:'),
+    'https://github.com/youleap/client/issues/new',
+  );
 }
 
 function abort(): void {

@@ -3,10 +3,7 @@ lockfileVersion: 5.4
 importers:
 
   .:
-    specifiers:
-      '@youleap/sdk': ./packages/sdk
-    devDependencies:
-      '@youleap/sdk': link:packages/sdk
+    specifiers: {}
 
   packages/cli:
     specifiers:
@@ -15,6 +12,7 @@ importers:
       '@types/get-installed-path': ^4.0.1
       '@types/lodash': ^4.14.182
       '@types/prompts': ^2.0.14
+      '@types/rimraf': ^3.0.2
       axios: ^0.27.2
       chalk: 4.1.0
       commander: ^9.4.0
@@ -26,6 +24,7 @@ importers:
       open: ^8.4.0
       ora: 5.4.1
       prompts: ^2.4.2
+      rimraf: ^3.0.2
       ts-morph: ^15.1.0
       tsup: ^6.1.3
       typescript: ^4.7.4
@@ -42,11 +41,13 @@ importers:
       open: 8.4.0
       ora: 5.4.1
       prompts: 2.4.2
+      rimraf: 3.0.2
     devDependencies:
       '@sindresorhus/tsconfig': 3.0.1
       '@types/get-installed-path': 4.0.1
       '@types/lodash': 4.14.182
       '@types/prompts': 2.0.14
+      '@types/rimraf': 3.0.2
       ts-morph: 15.1.0
       tsup: 6.2.0_typescript@4.7.4
       typescript: 4.7.4
@@ -144,8 +145,19 @@ packages:
     resolution: {integrity: sha512-E5837Qz+MZWdD7415qrjK/2srkx41zdInNCGzgLvFeqMeZepTZmIPGD/Dwz9UuPvHmfCh0XeokvLreOXksIY9g==}
     dev: true
 
+  /@types/glob/7.2.0:
+    resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
+    dependencies:
+      '@types/minimatch': 3.0.5
+      '@types/node': 18.6.3
+    dev: true
+
   /@types/lodash/4.14.182:
     resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
+    dev: true
+
+  /@types/minimatch/3.0.5:
+    resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
     dev: true
 
   /@types/node/18.6.3:
@@ -155,6 +167,13 @@ packages:
   /@types/prompts/2.0.14:
     resolution: {integrity: sha512-HZBd99fKxRWpYCErtm2/yxUZv6/PBI9J7N4TNFffl5JbrYMHBwF25DjQGTW3b3jmXq+9P6/8fCIb2ee57BFfYA==}
     dependencies:
+      '@types/node': 18.6.3
+    dev: true
+
+  /@types/rimraf/3.0.2:
+    resolution: {integrity: sha512-F3OznnSLAUxFrCEu/L5PY8+ny8DtcFRjx7fZZ9bycvXRi3KPTRS9HOitGZwvPg0juRhXFWIeKX58cnX5YqLohQ==}
+    dependencies:
+      '@types/glob': 7.2.0
       '@types/node': 18.6.3
     dev: true
 
@@ -273,7 +292,6 @@ packages:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
-    dev: true
 
   /brace-expansion/2.0.1:
     resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
@@ -383,7 +401,6 @@ packages:
 
   /concat-map/0.0.1:
     resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
-    dev: true
 
   /content-disposition/0.5.4:
     resolution: {integrity: sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==}
@@ -866,7 +883,6 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
-    dev: true
 
   /glob/8.0.3:
     resolution: {integrity: sha512-ull455NHSHI/Y1FqGaaYFaLGkNMMJbavMrEGFXG/PGrg6y7sutWHUHrz6gy6WEBH6akM1M414dWKCNs+IhKdiQ==}
@@ -1132,7 +1148,6 @@ packages:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
     dependencies:
       brace-expansion: 1.1.11
-    dev: true
 
   /minimatch/5.1.0:
     resolution: {integrity: sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==}
@@ -1247,7 +1262,6 @@ packages:
   /path-is-absolute/1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /path-key/3.1.1:
     resolution: {integrity: sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==}
@@ -1420,6 +1434,13 @@ packages:
 
   /rfdc/1.3.0:
     resolution: {integrity: sha512-V2hovdzFbOi77/WajaSMXk2OLm+xNIeQdMMuB7icj7bk6zi2F8GGAxigcnDFpJHbNyNcgyJDiP+8nOrY5cZGrA==}
+    dev: false
+
+  /rimraf/3.0.2:
+    resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    hasBin: true
+    dependencies:
+      glob: 7.1.6
     dev: false
 
   /rollup/2.77.2:
