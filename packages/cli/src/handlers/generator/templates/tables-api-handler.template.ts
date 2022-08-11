@@ -24,12 +24,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 
   public async findFirstQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
@@ -39,12 +35,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 
   public async findManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
@@ -54,12 +46,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 
   public async createQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
@@ -69,12 +57,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 
   public async createManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
@@ -84,12 +68,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 
   public async deleteQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
@@ -99,12 +79,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 
   public async deleteManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
@@ -114,12 +90,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 
   public async updateQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
@@ -129,12 +101,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 
   public async updateManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
@@ -144,12 +112,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
-      const { data } = await this.axiosInstance.request<Response>(options);
-      return data;
-    } catch (e) {
-      throw e;
-    }
+    const { data } = await this.axiosInstance.request<Response>(options);
+    return data;
   }
 }
 
