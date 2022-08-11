@@ -41,13 +41,8 @@ export class TableApiHandler {
       data: args,
     };
 
-    try {
       const { data } = await this.axiosInstance.request<Response>(options);
       return data;
-    } catch (e) {
-      throw e;
-    }
-  }
 
   public async findManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     const options: AxiosRequestConfig = {
