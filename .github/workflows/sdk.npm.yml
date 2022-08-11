@@ -45,7 +45,8 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_ACCESS_TOKEN }}
-          package: './packages/sdk/package.json'
+          package: 'packages/sdk/package.json'
+          check-version: true
 
       - if: steps.publish.outputs.type != 'none'
         run: |
