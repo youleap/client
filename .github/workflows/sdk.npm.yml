@@ -41,25 +41,20 @@ jobs:
       - name: Build Static SDK files
         run: pnpm run --filter "@youleap/sdk" build
 
-  publish:
-    name: Publish SDK to NPM
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: build
+      # - name: Open Web Client Directory
+      #   run: |
+      #     ls -la
 
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
-      - name: Open Web Client Directory
-        working-directory: packages/sdk
-        run: |
-          ls -la
+      # - name: Open Web Client Directory
+      #   working-directory: packages/sdk
 
       - name: Publish SDK to NPM
         uses: JS-DevTools/npm-publish@v1
+        working-directory: packages/sdk
+        run: |
+          ls -la
         with:
-          package: './packages/sdk/package.json'
+          # package: './packages/sdk/package.json'
           token: ${{ secrets.NPM_ACCESS_TOKEN }}
           check-version: true
 
