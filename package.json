@@ -12,7 +12,7 @@
   ],
   "engines": {
     "node": ">=14.17",
-    "pnpm": ">=7.3.0 <8"
+    "pnpm": ">=7.0.0"
   },
   "lint-staged": {
     "**/package.json": "pnpm run sync-packages && :",
