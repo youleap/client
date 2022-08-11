@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 export function base64URLEncode(str: Buffer) {
   return str.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');

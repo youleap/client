@@ -3,7 +3,7 @@ import fastifyStatic from '@fastify/static';
 import path from 'path';
 import fs from 'fs';
 import open from 'open';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { LoginPrompts } from './login.prompts';
 import { getToken } from '../../../apis/token.api';
 import { base64URLEncode, sha256 } from '../../../utils';
