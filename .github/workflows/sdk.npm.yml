@@ -7,8 +7,8 @@ on:
   pull_request: {}
 
 jobs:
-  publish-sdk:
-    name: Build and Deploy SDK
+  build:
+    name: Build SDK
     timeout-minutes: 15
     runs-on: ${{ matrix.os }}
 
@@ -41,10 +41,17 @@ jobs:
       - name: Build Static SDK files
         run: pnpm run --filter "@youleap/sdk" build
 
+  publish:
+    name: Publish SDK to NPM
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build
+
+    steps:
       - name: Publish SDK to NPM
         uses: JS-DevTools/npm-publish@v1
         with:
-          package: "./packages/sdk/package.json"
+          package: './packages/sdk/package.json'
           token: ${{ secrets.NPM_ACCESS_TOKEN }}
           check-version: true
           debug: 'console.debug'
