@@ -236,7 +236,6 @@ export type StringFieldUpdateOperationsInput = {
   set?: string;
 };
 
-// export type ModelName = typeof ModelName[keyof typeof ModelName];
 
 export type Datasources = {
   db?: Datasource;
