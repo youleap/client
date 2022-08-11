@@ -41,20 +41,19 @@ jobs:
       - name: Build Static SDK files
         run: pnpm run --filter "@youleap/sdk" build
 
-      # - name: Open Web Client Directory
-      #   run: |
-      #     ls -la
+      - name: Open Web Client Directory
+        run: |
+          ls -la
 
-      # - name: Open Web Client Directory
-      #   working-directory: packages/sdk
-
-      - name: Publish SDK to NPM
-        uses: JS-DevTools/npm-publish@v1
+      - name: Open Web Client Directory
         working-directory: packages/sdk
         run: |
           ls -la
+
+      - name: Publish SDK to NPM
+        uses: JS-DevTools/npm-publish@v1
         with:
-          # package: './packages/sdk/package.json'
+          package: './packages/sdk/package.json'
           token: ${{ secrets.NPM_ACCESS_TOKEN }}
           check-version: true
 
