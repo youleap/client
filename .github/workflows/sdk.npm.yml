@@ -42,6 +42,6 @@ jobs:
         run: pnpm run --filter "@youleap/sdk" build
 
       - name: Publish to NPM via PNPM
-        run: pnpm --filter "@youleap/sdk" publish --force
+        run: pnpm --filter "@youleap/sdk" publish --force --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
