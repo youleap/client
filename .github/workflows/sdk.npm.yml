@@ -44,7 +44,7 @@ jobs:
       - name: Publish SDK to NPM
         uses: JS-DevTools/npm-publish@v1
         with:
-          package: '""./packages/sdk/package.json"'
+          package: '"./packages/sdk/package.json"'
           token: ${{ secrets.NPM_ACCESS_TOKEN }}
           check-version: true
           debug: 'console.debug'
