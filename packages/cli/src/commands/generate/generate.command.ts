@@ -48,7 +48,6 @@ export async function handleGenerateCommand(): Promise<void> {
       GeneratePrompts.missingSDKInstalled();
     }
     GeneratePrompts.failed();
-    console.log(e);
     process.exit();
   }
 }
