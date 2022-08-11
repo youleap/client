@@ -1,14 +1,13 @@
-name: Publish SDK Package to NPM Workflow
+name: Publish SDK and CLI Packages to NPM Workflow
 
 on:
   push:
     branches:
       - main
-  pull_request: {}
 
 jobs:
-  build:
-    name: Build SDK
+  publish-sdk:
+    name: Publish Youleap SDK and CLI
     timeout-minutes: 15
     runs-on: ${{ matrix.os }}
 
@@ -35,13 +34,7 @@ jobs:
           node-version: 16
           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install --ignore-scripts --frozen-lockfile
-
-      - name: Build Static SDK files
-        run: pnpm run --filter "@youleap/sdk" build
-
       - name: Publish to NPM via PNPM
-        run: pnpm --filter "@youleap/sdk" publish --force --no-git-checks
+        run: pnpm --filter "@youleap/sdk" --filter "@youleap/cli" publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
