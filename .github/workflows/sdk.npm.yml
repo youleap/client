@@ -3,7 +3,7 @@ name: Publish SDK Package to NPM Workflow
 on:
   push:
     branches:
-      - master
+      - main
   pull_request: {}
 
 
