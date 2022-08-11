@@ -140,7 +140,7 @@ const tableMethodConfigGenerator = (
               CheckSelect<T, ${capitalize(tableName)}, ${capitalize(tableName)}GetPayload<T>>
               >(this.tableId, args);
         `);
-        writer.writeLine('if (result != null || result != {})');
+        writer.writeLine('if (result != null || Object.keys(result).length > 0)');
         writer.block(() => {
           writer.writeLine('return result;');
         });

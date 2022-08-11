@@ -35,7 +35,7 @@ export class FurnitureDelegate {
       SelectSubset<T, FurnitureFindUniqueArgs>,
       CheckSelect<T, Furniture, FurnitureGetPayload<T>>
     >(this.tableId, args);
-    if (result != null || result != {}) {
+    if (result != null || Object.keys(result).length > 0) {
       return result;
     }
     throw new Error('Could not find unique document.');
@@ -54,7 +54,7 @@ export class FurnitureDelegate {
       SelectSubset<T, FurnitureFindUniqueArgs>,
       CheckSelect<T, Furniture, FurnitureGetPayload<T>>
     >(this.tableId, args);
-    if (result != null || result != {}) {
+    if (result != null || Object.keys(result).length > 0) {
       return result;
     }
     throw new Error('Could not find first document.');
