@@ -41,5 +41,22 @@ jobs:
       - name: Build Static SDK files
         run: pnpm run --filter "@youleap/sdk" build
 
+      - name: Open Web Client Directory
+        run: |
+          ls -la
+
+      - name: Open Web Client Directory
+        working-directory: packages/sdk
+        run: |
+          ls -la
+
       - name: Publish SDK to NPM
-        run: pnpm publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          package: packages/sdk/package.json
+          token: ${{ secrets.NPM_ACCESS_TOKEN }}
+          check-version: true
+
+      - if: steps.publish.outputs.type != 'none'
+        run: |
+          echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
