@@ -1,0 +1,40 @@
+name: Publish SDK and CLI Packages to NPM Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-sdk:
+    name: Publish Youleap SDK and CLI
+    timeout-minutes: 15
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.2.1
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'pnpm'
+
+      - name: Publish to NPM via PNPM
+        run: pnpm --filter "@youleap/sdk" --filter "@youleap/cli" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}

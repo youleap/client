@@ -1,0 +1,23 @@
+{
+  "name": "@youleap/sdk",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "source": "./index.ts",
+  "types": "./index.ts",
+  "module": "node16",
+  "scripts": {
+    "build": "tsup src/index.ts && chmod +x dist/index.js",
+    "dev": "npm run build && NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 dist/index.js",
+    "clean": "rm -rf ./dist",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^3.0.1",
+    "tsup": "^6.1.3",
+    "typescript": "^4.7.4"
+  }
+}

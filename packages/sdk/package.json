@@ -1,0 +1,21 @@
+{
+  "name": "@youleap/sdk",
+  "version": "1.0.1",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "postinstall": "tsc"
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "axios": "^0.27.2"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^3.0.1",
+    "typescript": "^4.7.4"
+  }
+}
