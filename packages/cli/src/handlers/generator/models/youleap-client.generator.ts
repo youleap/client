@@ -22,7 +22,7 @@ export function generateYouleapClientHandler(
 
   const dbInitializer: { [key: string]: WriterFunctionOrValue } = {};
   for (const base of bases) {
-    dbInitializer[base.name.toLocaleLowerCase()] = (writer) => {
+    dbInitializer[base.name] = (writer) => {
       writer.writeLine(`new ${addDelegateSuffix(base.name)}(this.accessToken)`);
     };
   }

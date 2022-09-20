@@ -59,6 +59,17 @@ importers:
       '@sindresorhus/tsconfig': 3.0.1
       typescript: 4.7.4
 
+  test:
+    specifiers:
+      '@youleap/cli': workspace:^1.0.0
+      '@youleap/sdk': workspace:^1.0.1
+      typescript: ^4.7.4
+    dependencies:
+      '@youleap/cli': link:../packages/cli
+      '@youleap/sdk': link:../packages/sdk
+    devDependencies:
+      typescript: 4.7.4
+
 packages:
 
   /@fastify/accept-negotiator/1.0.0:

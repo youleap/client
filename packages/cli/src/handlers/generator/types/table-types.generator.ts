@@ -1,6 +1,6 @@
 import { OptionalKind, Project, PropertySignatureStructure, SourceFile, Writers } from 'ts-morph';
 import { Column, ColumnType, TableResponseDto } from '../../../dtos/base.dto';
-import { capitalize, lowercase } from '../../../utils/string-manipulation.utils';
+import { capitalize } from '../../../utils/string-manipulation.utils';
 
 export function generateTableTypesHandler(
   project: Project,
@@ -11,7 +11,7 @@ export function generateTableTypesHandler(
   for (const table of tables) {
     indexSourceFile
       .addExportDeclaration({
-        moduleSpecifier: `./${table.name.toLowerCase()}`,
+        moduleSpecifier: `./${table.name}`,
       })
       .toNamespaceExport();
 
@@ -41,7 +41,7 @@ export function generateTableTypesHandler(
     handleTableInputTypes(
       tableTypesFile,
       table.name,
-      table.columns.map((column) => ({ ...column, name: lowercase(column.name) })),
+      table.columns.map((column) => ({ ...column })),
     );
     handleTableGetPayloadType(tableTypesFile, table.name);
   }

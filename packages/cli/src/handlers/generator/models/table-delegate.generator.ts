@@ -22,11 +22,11 @@ export function generateTableDelegateHandler(
   for (const table of tables) {
     tablesIndexExportFile
       .addExportDeclaration({
-        moduleSpecifier: `./${table.name.toLowerCase()}`,
+        moduleSpecifier: `./${table.name}`,
       })
       .toNamespaceExport();
 
-    const tableDelegateClassFile = project.createSourceFile(`${generationPath}/${table.name.toLowerCase()}.ts`, '', {
+    const tableDelegateClassFile = project.createSourceFile(`${generationPath}/${table.name}.ts`, '', {
       overwrite: true,
     });
 

@@ -12,11 +12,11 @@ export function generateBaseDelegateHandler(
   for (const base of bases) {
     basesIndexExportFile
       .addExportDeclaration({
-        moduleSpecifier: `./${base.name.toLowerCase()}`,
+        moduleSpecifier: `./${base.name}`,
       })
       .toNamespaceExport();
 
-    const baseDelegateClassFile = project.createSourceFile(`${generationPath}/${base.name.toLowerCase()}.ts`, '', {
+    const baseDelegateClassFile = project.createSourceFile(`${generationPath}/${base.name}.ts`, '', {
       overwrite: true,
     });
 
@@ -30,7 +30,7 @@ export function generateBaseDelegateHandler(
         return {
           kind: StructureKind.ImportDeclaration,
           namedImports: [addDelegateSuffix(table.name)],
-          moduleSpecifier: `./tables/${table.name.toLocaleLowerCase()}`,
+          moduleSpecifier: `./tables/${table.name}`,
         };
       }),
     );
@@ -45,7 +45,7 @@ export function generateBaseDelegateHandler(
     for (const table of base.tables) {
       baseDelegateClass.addProperty({
         scope: Scope.Public,
-        name: table.name.toLowerCase(),
+        name: table.name,
         type: addDelegateSuffix(table.name),
       });
     }
@@ -61,7 +61,7 @@ export function generateBaseDelegateHandler(
       statements: (writer) => {
         for (const table of base.tables) {
           writer.writeLine(
-            `this.${table.name.toLocaleLowerCase()} = new ${addDelegateSuffix(table.name)}(accessToken)`,
+            `this.${table.name} = new ${addDelegateSuffix(table.name)}(accessToken)`,
           );
         }
       },

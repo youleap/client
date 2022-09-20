@@ -1,0 +1,23 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "auth": "youleap auth login",
+    "help": "youleap help",
+    "build": "tsc index.ts",
+    "start": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 node index.js",
+    "generate": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 youleap generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@youleap/cli": "workspace:^1.0.0",
+    "@youleap/sdk": "workspace:^1.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  }
+}
