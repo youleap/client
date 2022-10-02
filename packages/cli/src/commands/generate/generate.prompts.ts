@@ -44,7 +44,7 @@ function sdkUsage(): void {
   console.log();
   console.log(
     `${codeSyntaxKeyword('import')} { ${codeSyntaxVariable('YouleapClient')} } from ${codeSyntaxString(
-      '"@youleap/client"',
+      '"@youleap/sdk"',
     )};`,
   );
   console.log(

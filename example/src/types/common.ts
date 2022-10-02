@@ -236,7 +236,6 @@ export type StringFieldUpdateOperationsInput = {
   set?: string;
 };
 
-
 export type Datasources = {
   db?: Datasource;
 };
@@ -303,3 +302,9 @@ export type IntFieldUpdateOperationsInput = {
   multiply?: number;
   divide?: number;
 };
+
+export interface ErrorData {
+  statusCode: number;
+  message: string;
+  error: string;
+}

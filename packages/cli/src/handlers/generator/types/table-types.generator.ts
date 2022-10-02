@@ -169,13 +169,7 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
     { name: 'id', hasQuestionToken: true, type: 'SortOrder' },
   ];
 
-  const tableCreateInputProperties: Array<OptionalKind<PropertySignatureStructure>> = [
-    {
-      name: 'id',
-      hasQuestionToken: true,
-      type: 'string',
-    },
-  ];
+  const tableCreateInputProperties: Array<OptionalKind<PropertySignatureStructure>> = [];
 
   const tableUpdateInput: Array<OptionalKind<PropertySignatureStructure>> = [];
 
@@ -232,7 +226,6 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
      * These cases require their own types which are generated here.
      */
     if (column.type === ColumnType.MultipleSelect) {
-      console.log({ column });
       tableTypesFile.addTypeAliases([
         {
           name: `${capitalizedTableName}Create${capitalize(column.name)}Input`,

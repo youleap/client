@@ -42,15 +42,9 @@ var youleap = new sdk_1.YouleapClient({ accessToken: 'YOULEAP_SECRET' });
     var result;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, youleap.db.smsBroadcast.campaigns.create({
+            case 0: return [4 /*yield*/, youleap.db.smsBroadcast.stores.create({
                     data: {
-                        week: 3,
-                        day: 'Sunday',
-                        link: 'https://youleap-local.io',
-                        addContactName: true,
-                        addUnsubscribeLink: false,
-                        cronjobId: 'cron1',
-                        type: 2
+                        storeId: 123123
                     }
                 })];
             case 1:
