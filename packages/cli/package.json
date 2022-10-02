@@ -1,6 +1,6 @@
 {
   "name": "@youleap/cli",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "license": "MIT",
   "bin": {
     "youleap": "dist/index.js"
@@ -13,8 +13,7 @@
     "auth:print-access-token": "pnpm run build && dist/index.js auth print-access-token",
     "auth:logout": "pnpm run build && dist/index.js auth logout",
     "generate": "pnpm run build && NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_NO_WARNINGS=1 dist/index.js generate",
-    "prisma": "prisma generate",
-    "postinstall": "tsup src/index.ts && cp -r src/assets ./dist"
+    "prisma": "prisma generate"
   },
   "files": [
     "dist/index.js"
