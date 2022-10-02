@@ -26,6 +26,9 @@ export function generateTableTypesHandler(
         'StringNullableListFilter',
         'BoolNullableListFilter',
         'IntNullableListFilter',
+        'StringListFilter',
+        'BoolListFilter',
+        'IntListFilter',
         'TrueKeys',
         'SortOrder',
         'XOR',
@@ -213,7 +216,7 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
 
     tableCreateInputProperties.push({
       name: column.name,
-      hasQuestionToken: column.default != null || primitiveColumnType.includes('Array'),
+      hasQuestionToken: column.default != null || primitiveColumnType.includes('Array') || !column.required,
       type: primitiveToCreateInputType(primitiveColumnType, tableName, column.name),
     });
 
@@ -229,12 +232,13 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
      * These cases require their own types which are generated here.
      */
     if (column.type === ColumnType.MultipleSelect) {
+      console.log({ column });
       tableTypesFile.addTypeAliases([
         {
           name: `${capitalizedTableName}Create${capitalize(column.name)}Input`,
           type: Writers.object({
             //! Change this is the feature for other array types !/
-            set: ColumnType.MultipleSelect ? 'Enumerable<string>;' : 'Enumerable<string>;',
+            set: ColumnType.MultipleSelect ? 'Enumerable<string>' : 'Enumerable<string>',
           }),
           isExported: true,
         },
@@ -242,7 +246,7 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
           name: `${capitalizedTableName}Update${capitalize(column.name)}Input`,
           type: Writers.object({
             //! Change this is the feature for other array types !/
-            'set?': ColumnType.MultipleSelect ? 'Enumerable<string>;' : 'Enumerable<string>;',
+            'set?': ColumnType.MultipleSelect ? 'Enumerable<string>' : 'Enumerable<string>',
             'push?': ColumnType.MultipleSelect
               ? Writers.unionType('string', 'Enumerable<string>')
               : Writers.unionType('string', 'Enumerable<string>'),
