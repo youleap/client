@@ -24,8 +24,8 @@ export class TableApiHandler {
   public async findUniqueQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     try {
       const options: AxiosRequestConfig<Args> = {
-        method: 'GET',
-        url: `/base/table/${tableId}/query/unique`,
+        method: 'POST',
+        url: `/base/table/${tableId}/query/find/unique`,
         data: args,
       };
 
@@ -44,8 +44,8 @@ export class TableApiHandler {
   public async findFirstQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     try {
       const options: AxiosRequestConfig = {
-        method: 'GET',
-        url: `/base/table/${tableId}/query`,
+        method: 'POST',
+        url: `/base/table/${tableId}/query/find`,
         data: args,
       };
 
@@ -64,8 +64,8 @@ export class TableApiHandler {
   public async findManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     try {
       const options: AxiosRequestConfig = {
-        method: 'GET',
-        url: `/base/table/${tableId}/query/many`,
+        method: 'POST',
+        url: `/base/table/${tableId}/query/find/many`,
         data: args,
       };
 
@@ -85,7 +85,7 @@ export class TableApiHandler {
     try {
       const options: AxiosRequestConfig = {
         method: 'POST',
-        url: `/base/table/${tableId}/query`,
+        url: `/base/table/${tableId}/query/create`,
         data: args,
       };
 
@@ -105,7 +105,7 @@ export class TableApiHandler {
     try {
       const options: AxiosRequestConfig = {
         method: 'POST',
-        url: `/base/table/${tableId}/query/many`,
+        url: `/base/table/${tableId}/query/create/many`,
         data: args,
       };
 
@@ -124,8 +124,8 @@ export class TableApiHandler {
   public async deleteQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     try {
       const options: AxiosRequestConfig = {
-        method: 'DELETE',
-        url: `/base/table/${tableId}/query`,
+        method: 'POST',
+        url: `/base/table/${tableId}/query/delete`,
         data: args,
       };
 
@@ -144,8 +144,8 @@ export class TableApiHandler {
   public async deleteManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     try {
       const options: AxiosRequestConfig = {
-        method: 'DELETE',
-        url: `/base/table/${tableId}/query/many`,
+        method: 'POST',
+        url: `/base/table/${tableId}/query/delete/many`,
         data: args,
       };
 
@@ -164,8 +164,8 @@ export class TableApiHandler {
   public async updateQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     try {
       const options: AxiosRequestConfig = {
-        method: 'PATCH',
-        url: `/base/table/${tableId}/query/many`,
+        method: 'POST',
+        url: `/base/table/${tableId}/query/update`,
         data: args,
       };
 
@@ -184,8 +184,8 @@ export class TableApiHandler {
   public async updateManyQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     try {
       const options: AxiosRequestConfig = {
-        method: 'PATCH',
-        url: `/base/table/${tableId}/query/many`,
+        method: 'POST',
+        url: `/base/table/${tableId}/query/update/many`,
         data: args,
       };
 
