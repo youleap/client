@@ -17,12 +17,13 @@ export class TableApiHandler {
       responseType: 'json',
       headers: {
         authorization: `Bearer ${accessToken ?? this.accessToken}`,
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     });
   }
   public async findUniqueQueryApi<Args, Response>(tableId: string, args?: Args): Promise<Response> {
     try {
-      const options: AxiosRequestConfig = {
+      const options: AxiosRequestConfig<Args> = {
         method: 'GET',
         url: `/base/table/${tableId}/query/unique`,
         data: args,

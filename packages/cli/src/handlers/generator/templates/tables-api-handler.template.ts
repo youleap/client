@@ -14,6 +14,7 @@ export class TableApiHandler {
       responseType: 'json',
       headers: {
         authorization: \`Bearer \${accessToken ?? this.accessToken}\`,
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     });
   }

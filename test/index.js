@@ -42,9 +42,9 @@ var youleap = new sdk_1.YouleapClient({ accessToken: 'YOULEAP_SECRET' });
     var result;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, youleap.db.smsBroadcast.stores.create({
-                    data: {
-                        storeId: 123123
+            case 0: return [4 /*yield*/, youleap.db.smsBroadcast.stores.findUnique({
+                    where: {
+                        id: 'row_cvxhc8jl8bndp6t'
                     }
                 })];
             case 1:
