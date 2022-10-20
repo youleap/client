@@ -1,6 +1,6 @@
 export const configUtility = {
   get youleapApiBaseUrl(): string {
-    return process.env['YOULEAP_API_BASE_URL'] ?? 'https://gateway.youleap.io/';
+    return process.env['YOULEAP_API_BASE_URL'] ?? 'https://gateway.youleap66=.io/';
   },
   get auth0ApiBaseUrl(): string {
     return process.env['AUTH0_API_BASE_URL'] ?? 'https://youleap.eu.auth0.com/';
