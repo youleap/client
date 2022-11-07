@@ -1,5 +1,13 @@
-import { OptionalKind, Project, PropertySignatureStructure, SourceFile, Writers } from 'ts-morph';
-import { Column, ColumnType, TableResponseDto } from '../../../dtos/base.dto';
+import { toLower } from 'lodash';
+import {
+  OptionalKind,
+  Project,
+  PropertySignatureStructure,
+  SourceFile,
+  VariableDeclarationKind,
+  Writers,
+} from 'ts-morph';
+import { Column, ColumnType, PrimitiveTypes, TableResponseDto } from '../../../dtos/base.dto';
 import { capitalize } from '../../../utils/string-manipulation.utils';
 
 export function generateTableTypesHandler(
@@ -174,7 +182,7 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
   const tableUpdateInput: Array<OptionalKind<PropertySignatureStructure>> = [];
 
   for (const column of columns) {
-    const primitiveColumnType = columnTypeToPrimitiveType(column.type);
+    const primitiveColumnType = columnTypeToPrimitiveType(column);
 
     tableProperties.push({
       name: column.name,
@@ -225,28 +233,92 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
      * Arrays, Enums, etc...
      * These cases require their own types which are generated here.
      */
-    if (column.type === ColumnType.MultipleSelect) {
-      tableTypesFile.addTypeAliases([
-        {
-          name: `${capitalizedTableName}Create${capitalize(column.name)}Input`,
-          type: Writers.object({
-            //! Change this is the feature for other array types !/
-            set: ColumnType.MultipleSelect ? 'Enumerable<string>' : 'Enumerable<string>',
-          }),
+
+    switch (column.type) {
+      case ColumnType.MultipleSelect:
+      case ColumnType.SingleSelect: {
+        const optionsObject: Record<string, string> = {};
+        for (const option of column.options) {
+          optionsObject[option.name] = option.name;
+        }
+
+        tableTypesFile.addVariableStatement({
+          declarationKind: VariableDeclarationKind.Const,
+          declarations: [
+            {
+              name: `${capitalize(column.name)}Type`,
+              initializer: Writers.object(optionsObject),
+            },
+          ],
+        });
+
+        tableTypesFile.addTypeAlias({
+          name: `${capitalize(column.name)}Type`,
           isExported: true,
-        },
-        {
-          name: `${capitalizedTableName}Update${capitalize(column.name)}Input`,
-          type: Writers.object({
-            //! Change this is the feature for other array types !/
-            'set?': ColumnType.MultipleSelect ? 'Enumerable<string>' : 'Enumerable<string>',
-            'push?': ColumnType.MultipleSelect
-              ? Writers.unionType('string', 'Enumerable<string>')
-              : Writers.unionType('string', 'Enumerable<string>'),
-          }),
-          isExported: true,
-        },
-      ]);
+          type: ` typeof ${capitalize(column.name)}Type[keyof typeof ${capitalize(column.name)}Type]`,
+        });
+
+        const setType: string =
+          column.type === ColumnType.MultipleSelect
+            ? `Enumerable<${capitalize(column.name)}Type>`
+            : column.type === ColumnType.SingleSelect
+            ? `${capitalize(column.name)}Type`
+            : 'unknown';
+
+        tableTypesFile.addTypeAliases([
+          {
+            name: `${capitalizedTableName}Create${capitalize(column.name)}Input`,
+            type: Writers.object({
+              set: setType,
+            }),
+            isExported: true,
+          },
+          {
+            name: `${capitalizedTableName}Update${capitalize(column.name)}Input`,
+            type: Writers.object({
+              'set?': setType,
+              ...(column.type === ColumnType.MultipleSelect
+                ? {
+                    'push?': Writers.unionType(
+                      `${capitalize(column.name)}Type`,
+                      `Enumerable<${capitalize(column.name)}Type>`,
+                    ),
+                  }
+                : {}),
+            }),
+            isExported: true,
+          },
+        ]);
+
+        break;
+      }
+      case ColumnType.Array: {
+        const setType: string = `Array<${column.arrayPrimitive}>`;
+
+        tableTypesFile.addTypeAliases([
+          {
+            name: `${capitalizedTableName}Create${capitalize(column.name)}Input`,
+            type: Writers.object({
+              set: setType,
+            }),
+            isExported: true,
+          },
+          {
+            name: `${capitalizedTableName}Update${capitalize(column.name)}Input`,
+            type: Writers.object({
+              'set?': setType,
+              'push?': Writers.unionType(`${column.arrayPrimitive}`, `Enumerable<${column.arrayPrimitive}>`),
+            }),
+            isExported: true,
+          },
+        ]);
+
+        break;
+      }
+
+      default: {
+        break;
+      }
     }
   }
 
@@ -362,10 +434,7 @@ function handleTableGetPayloadType(tableTypesFile: SourceFile, tableName: string
   });
 }
 
-function primitiveToWhereInputType(
-  type: 'string' | 'number' | 'boolean' | 'Array<string>' | 'Array<number>' | 'Array<boolean>',
-  isRequired: boolean = false,
-): string {
+function primitiveToWhereInputType(type: PrimitiveTypes, isRequired: boolean = false): string {
   switch (type) {
     case 'string':
       return 'StringFilter | string';
@@ -374,6 +443,9 @@ function primitiveToWhereInputType(
     case 'number':
       return 'IntFilter | number';
 
+    case 'unknown':
+      return 'unknown';
+
     default:
       return `${type === 'Array<string>' ? 'String' : type === 'Array<boolean>' ? 'Bool' : 'Int'}${
         isRequired ? 'Nullable' : ''
@@ -381,11 +453,7 @@ function primitiveToWhereInputType(
   }
 }
 
-function primitiveToCreateInputType(
-  type: 'string' | 'number' | 'boolean' | 'Array<string>' | 'Array<number>' | 'Array<boolean>',
-  tableName: string,
-  columnName: string,
-): string {
+function primitiveToCreateInputType(type: PrimitiveTypes, tableName: string, columnName: string): string {
   if (type === 'Array<boolean>' || type === 'Array<number>' || type === 'Array<string>') {
     return `${capitalize(tableName)}Create${capitalize(columnName)}Input | Enumerable<${type
       .replace('Array<', '')
@@ -394,11 +462,7 @@ function primitiveToCreateInputType(
   return type;
 }
 
-function primitiveToUpdateInputType(
-  type: 'string' | 'number' | 'boolean' | 'Array<string>' | 'Array<number>' | 'Array<boolean>',
-  tableName: string,
-  columnName: string,
-): string {
+function primitiveToUpdateInputType(type: PrimitiveTypes, tableName: string, columnName: string): string {
   switch (type) {
     case 'string':
       return 'StringFieldUpdateOperationsInput | string';
@@ -406,6 +470,9 @@ function primitiveToUpdateInputType(
       return 'BoolFieldUpdateOperationsInput | boolean';
     case 'number':
       return 'IntFieldUpdateOperationsInput | number';
+      
+    case 'unknown':
+      return 'unknown';
 
     default:
       return `${capitalize(tableName)}Update${capitalize(columnName)}Input | Enumerable<${type
@@ -414,10 +481,8 @@ function primitiveToUpdateInputType(
   }
 }
 
-function columnTypeToPrimitiveType(
-  type: ColumnType,
-): 'string' | 'number' | 'boolean' | 'Array<string>' | 'Array<number>' | 'Array<boolean>' {
-  switch (type) {
+function columnTypeToPrimitiveType(column: Column): PrimitiveTypes {
+  switch (column.type) {
     case ColumnType.MultipleSelect:
       return 'Array<string>';
 
@@ -428,6 +493,12 @@ function columnTypeToPrimitiveType(
     case ColumnType.Currency:
     case ColumnType.Percent:
       return 'number';
+
+    case ColumnType.Array:
+      return `Array<${column.arrayPrimitive}>`;
+
+    case ColumnType.JSON:
+      return 'unknown';
 
     default:
       return 'string';

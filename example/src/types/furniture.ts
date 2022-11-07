@@ -25,10 +25,13 @@ export type Furniture = {
   vendor: string;
   inStock: boolean;
   unitCost: number;
+  idList: number[]
+  jsonItem: unknown;
 };
 
 /**
  * Enums
+ * This is for the "select" or "multiselect" column types
  */
 
 const FurnitureTypes = {
