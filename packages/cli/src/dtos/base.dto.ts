@@ -163,6 +163,8 @@ export type PrimitiveTypes =
   | 'string'
   | 'number'
   | 'boolean'
+  | `${string}Type`
+  | `Array<${string}Type>`
   | 'Array<string>'
   | 'Array<number>'
   | 'Array<boolean>'

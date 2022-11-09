@@ -67,5 +67,6 @@ export async function generatorHandler(
     typesIndexExportFile,
   );
 
+  await project.save();
   await project.emit();
 }
