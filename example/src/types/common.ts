@@ -19,6 +19,7 @@ export type StringFilter = {
   not?: NestedStringFilter | string;
 };
 
+
 export type NestedStringFilter = {
   equals?: string;
   in?: Enumerable<string>;
@@ -66,6 +67,8 @@ export type IntNullableListFilter = {
   isEmpty?: number;
 };
 
+export type ArrayNullableFilter = StringNullableListFilter | IntNullableListFilter | BoolNullableListFilter;
+
 export type StringListFilter = {
   equals?: Enumerable<string>;
   has?: string;
@@ -89,6 +92,8 @@ export type IntListFilter = {
   hasSome?: Enumerable<number>;
   isEmpty?: number;
 };
+
+export type ArrayFilter = StringListFilter | IntListFilter | BoolListFilter;
 
 export type HasSelect = {
   select: any;
@@ -200,9 +205,9 @@ export type Merge<U extends object> = ComputeRaw<_Merge<Strict<U>>>;
   */
 export type Boolean = True | False;
 
-// /**
-// 1
-// */
+/**
+1
+*/
 export type True = 1;
 
 /**
