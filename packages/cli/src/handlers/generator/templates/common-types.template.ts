@@ -233,10 +233,6 @@ export type Overwrite<O extends object, O1 extends object> = {
   [K in keyof O]: K extends keyof O1 ? O1[K] : O[K];
 } & {};
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string;
-};
-
 // export type ModelName = typeof ModelName[keyof typeof ModelName];
 
 export type Datasources = {
@@ -294,10 +290,28 @@ export type GetScalarType<T, O> = O extends object
     }
   : never;
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean;
+// String Update Operations
+export type StringFieldUpdateOperationsInput = {
+  set?: string;
 };
 
+export type StringFieldNullableUpdateOperationsInput = {
+  set?: string | null;
+  unset?: boolean;
+};
+
+export type StringListFieldUpdateOperationsInput = {
+  set?: Enumerable<string>;
+  push?: Enumerable<string>;
+};
+
+export type StringListFieldNullableUpdateOperationsInput = {
+  set?: Enumerable<string> | null;
+  push?: Enumerable<string>;
+  unset?: boolean;
+};
+
+// Integer Update Operations
 export type IntFieldUpdateOperationsInput = {
   set?: number;
   increment?: number;
@@ -305,4 +319,46 @@ export type IntFieldUpdateOperationsInput = {
   multiply?: number;
   divide?: number;
 };
+
+export type IntFieldNullableUpdateOperationsInput = {
+  set?: number | null;
+  increment?: number;
+  decrement?: number;
+  multiply?: number;
+  divide?: number;
+  unset?: boolean;
+};
+
+export type IntListFieldUpdateOperationsInput = {
+  set?: Enumerable<number>;
+  push?: Enumerable<number>;
+};
+
+export type IntListFieldNullableUpdateOperationsInput = {
+  set?: Enumerable<number> | null;
+  push?: Enumerable<number>;
+  unset?: boolean;
+};
+
+// Boolean Update Operations
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean;
+};
+
+export type BoolFieldNullableUpdateOperationsInput = {
+  set?: boolean | null;
+  unset?: boolean;
+};
+
+export type BoolListFieldUpdateOperationsInput = {
+  set?: Enumerable<boolean>;
+  push?: Enumerable<boolean>;
+};
+
+export type BoolListFieldNullableUpdateOperationsInput = {
+  set?: Enumerable<boolean> | null;
+  push?: Enumerable<boolean>;
+  unset?: boolean;
+};
+
 `;

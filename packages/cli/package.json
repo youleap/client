@@ -1,6 +1,6 @@
 {
   "name": "@youleap/cli",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "license": "MIT",
   "bin": {
     "youleap": "dist/index.js"

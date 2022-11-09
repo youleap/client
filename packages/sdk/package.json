@@ -1,6 +1,6 @@
 {
   "name": "@youleap/sdk",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "license": "MIT",
   "main": "./dist/index.js",
   "exports": {

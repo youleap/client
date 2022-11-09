@@ -42,8 +42,17 @@ export function generateTableTypesHandler(
         'XOR',
         'Merge',
         'StringFieldUpdateOperationsInput',
+        'StringListFieldUpdateOperationsInput',
         'BoolFieldUpdateOperationsInput',
+        'BoolListFieldUpdateOperationsInput',
         'IntFieldUpdateOperationsInput',
+        'IntListFieldUpdateOperationsInput',
+        'StringFieldNullableUpdateOperationsInput',
+        'StringListFieldNullableUpdateOperationsInput',
+        'BoolFieldNullableUpdateOperationsInput',
+        'BoolListFieldNullableUpdateOperationsInput',
+        'IntFieldNullableUpdateOperationsInput',
+        'IntListFieldNullableUpdateOperationsInput',
       ],
       moduleSpecifier: './common',
     });
@@ -213,7 +222,7 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
     tableWhereInputProperties.push({
       name: column.name,
       hasQuestionToken: true,
-      type: primitiveToWhereInputType(primitiveColumnType, column.name, column.required),
+      type: primitiveToWhereInputType(primitiveColumnType, column.name),
     });
 
     tableCreateInputProperties.push({
@@ -225,7 +234,7 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
     tableUpdateInput.push({
       name: column.name,
       hasQuestionToken: true,
-      type: primitiveToUpdateInputType(primitiveColumnType, tableName, column.name),
+      type: primitiveToUpdateInputType(primitiveColumnType, column.name, column.required),
     });
 
     /**
@@ -266,29 +275,6 @@ function handleTableInputTypes(tableTypesFile: SourceFile, tableName: string, co
                     ),
                   }
                 : {}),
-            }),
-            isExported: true,
-          },
-        ]);
-
-        break;
-      }
-      case ColumnType.Array: {
-        const setType: string = `Array<${column.arrayPrimitive}>`;
-
-        tableTypesFile.addTypeAliases([
-          {
-            name: `${capitalizedTableName}Create${capitalize(column.name)}Input`,
-            type: Writers.object({
-              set: setType,
-            }),
-            isExported: true,
-          },
-          {
-            name: `${capitalizedTableName}Update${capitalize(column.name)}Input`,
-            type: Writers.object({
-              'set?': setType,
-              'push?': Writers.unionType(`${column.arrayPrimitive}`, `Enumerable<${column.arrayPrimitive}>`),
             }),
             isExported: true,
           },
@@ -517,10 +503,23 @@ function handleEnumTypeGeneration(
         ],
       }),
     },
+    {
+      name: `${capitalize(columnName)}TypeFieldNullableUpdateOperationsInput`,
+      isExported: true,
+      type: Writers.objectType({
+        properties: [
+          {
+            name: 'set',
+            hasQuestionToken: true,
+            type: `Enumerable<${capitalize(columnName)}Type> | null`,
+          },
+        ],
+      }),
+    },
   ]);
 }
 
-function primitiveToWhereInputType(type: PrimitiveTypes, columnName: ColumnName, isRequired: boolean = false): string {
+function primitiveToWhereInputType(type: PrimitiveTypes, columnName: ColumnName): string {
   switch (type) {
     case 'string':
       return 'StringFilter | string';
@@ -532,6 +531,15 @@ function primitiveToWhereInputType(type: PrimitiveTypes, columnName: ColumnName,
     case 'unknown':
       return 'unknown';
 
+    case 'Array<boolean>':
+      return 'BoolListFilter | boolean';
+
+    case 'Array<number>':
+      return 'IntListFilter | number';
+
+    case 'Array<string>':
+      return 'StringListFilter | string';
+
     default:
       if (type.includes('Type')) {
         if (type.includes('Array')) {
@@ -539,53 +547,50 @@ function primitiveToWhereInputType(type: PrimitiveTypes, columnName: ColumnName,
         }
         return `${capitalize(columnName)}TypeFilter | ${capitalize(columnName)}Type`;
       }
-      return `${
-        type === 'Array<string>'
-          ? 'String'
-          : type === 'Array<boolean>'
-          ? 'Bool'
-          : type === 'Array<number>'
-          ? 'Int'
-          : 'String'
-      }${isRequired ? 'Nullable' : ''}ListFilter`;
+      return 'unknown';
   }
 }
 
 function primitiveToCreateInputType(type: PrimitiveTypes, tableName: string, columnName: string): string {
-  //TODO: Check for enums
-
-  if (type === 'Array<boolean>' || type === 'Array<number>' || type === 'Array<string>') {
-    return `${capitalize(tableName)}Create${capitalize(columnName)}Input | Enumerable<${type
-      .replace('Array<', '')
-      .replace('>', '')}>`;
-  }
   return type;
 }
 
-function primitiveToUpdateInputType(type: PrimitiveTypes, tableName: string, columnName: string): string {
+function primitiveToUpdateInputType(type: PrimitiveTypes, columnName: string, required: boolean): string {
   //TODO: Check for enums
   switch (type) {
     case 'string':
-      return 'StringFieldUpdateOperationsInput | string';
+      return `StringField${required ? '' : 'Nullable'}UpdateOperationsInput | string ${required ? '' : '| null'}`;
     case 'boolean':
-      return 'BoolFieldUpdateOperationsInput | boolean';
+      return `BoolField${required ? '' : 'Nullable'}UpdateOperationsInput | boolean ${required ? '' : '| null'}`;
     case 'number':
-      return 'IntFieldUpdateOperationsInput | number';
+      return `IntField${required ? '' : 'Nullable'}UpdateOperationsInput | number ${required ? '' : '| null'}`;
 
     case 'unknown':
-      return 'unknown';
+      return `unknown ${required ? '' : '| null'}`;
+
+    case 'Array<boolean>':
+      return `BoolListField${required ? '' : 'Nullable'}UpdateOperationsInput | Enumerable<boolean> ${
+        required ? '' : '| null'
+      }`;
+
+    case 'Array<number>':
+      return `IntListField${required ? '' : 'Nullable'}UpdateOperationsInput | Enumerable<number> ${
+        required ? '' : '| null'
+      }`;
+
+    case 'Array<string>':
+      return `StringListField${required ? '' : 'Nullable'}UpdateOperationsInput | Enumerable<string> ${
+        required ? '' : '| null'
+      }`;
 
     default:
       if (type.includes('Type')) {
         if (type.includes('Array')) {
-          return `${capitalize(columnName)}TypeFieldUpdateOperationsInput`;
+          return `${capitalize(columnName)}TypeField${required ? '' : 'Nullable'}UpdateOperationsInput`;
         }
-        return `${capitalize(columnName)}Type`;
+        return `${capitalize(columnName)}Type ${required ? '' : '| null'}`;
       }
-
-      return `${capitalize(tableName)}Update${capitalize(columnName)}Input | Enumerable<${type
-        .replace('Array<', '')
-        .replace('>', '')}>`;
+      return 'unknown';
   }
 }
 
